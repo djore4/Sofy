@@ -3,88 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A Máquina de Sílabas</title>
+    <title>Máquina de Sílabas - Som Ativado</title>
     <style>
-        :root {
-            --machine-color: #454545;
-            --neon-blue: #00d4ff;
-            --accent: #ff007a;
+        :root { --machine-color: #454545; --neon-blue: #00d4ff; --accent: #ff007a; }
+        body { margin: 0; padding: 0; font-family: sans-serif; background: #121212; color: white; overflow: hidden; touch-action: none; text-align: center; }
+        
+        /* Overlay de Início para Ativar Som */
+        #start-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 5000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #start-btn {
+            padding: 20px 40px; font-size: 2rem; background: var(--accent);
+            color: white; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 0 20px var(--accent);
         }
 
-        body {
-            margin: 0; padding: 0; font-family: 'Comic Sans MS', sans-serif;
-            background: #121212; color: white; overflow: hidden; touch-action: none;
-        }
-
-        /* Máquina Principal */
-        .game-world {
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            height: 100vh; padding: 20px;
-        }
-
-        .machine-container {
-            position: relative; width: 320px; height: 200px;
-            background: var(--machine-color); border-radius: 20px;
-            border: 8px solid #333; display: flex; align-items: center;
-            justify-content: center; box-shadow: 0 0 30px rgba(0,212,255,0.3);
-        }
-
-        .consonant-fixed {
-            font-size: 6rem; font-weight: 900; color: var(--neon-blue);
-            margin-right: 10px; text-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        .vowel-drop-zone {
-            width: 100px; height: 130px; border: 4px dashed rgba(255,255,255,0.3);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            font-size: 6rem; font-weight: 900; color: var(--accent);
-        }
-
-        /* Carrossel de Vogais */
-        .vowel-carousel {
-            display: flex; gap: 20px; padding: 20px;
-            overflow-x: auto; width: 100%; justify-content: center;
-            background: rgba(255,255,255,0.05); border-radius: 50px 50px 0 0;
-        }
-
-        .vowel-card {
-            min-width: 80px; height: 80px; background: var(--accent);
-            border-radius: 20px; display: flex; align-items: center;
-            justify-content: center; font-size: 3rem; font-weight: bold;
-            box-shadow: 0 6px #9d004b; cursor: pointer;
-        }
-
-        /* Feedback Visual */
-        #result-display {
-            position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%) scale(0);
-            text-align: center; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
-        }
-
+        .game-world { display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 100vh; padding: 20px; }
+        .machine-container { position: relative; width: 320px; height: 200px; background: var(--machine-color); border-radius: 20px; border: 8px solid #333; display: flex; align-items: center; justify-content: center; }
+        .consonant-fixed { font-size: 6rem; font-weight: 900; color: var(--neon-blue); margin-right: 10px; }
+        .vowel-drop-zone { width: 100px; height: 130px; border: 4px dashed rgba(255,255,255,0.3); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 6rem; font-weight: 900; color: var(--accent); }
+        .vowel-carousel { display: flex; gap: 15px; padding: 20px; overflow-x: auto; width: 100%; justify-content: center; }
+        .vowel-card { min-width: 70px; height: 70px; background: var(--accent); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; }
+        #result-display { position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%) scale(0); transition: 0.5s; z-index: 100; pointer-events: none; }
         #result-display.show { transform: translate(-50%, -50%) scale(1.5); }
-
-        .result-image { font-size: 8rem; display: block; }
-        .result-text { font-size: 3rem; font-weight: bold; text-transform: uppercase; color: yellow; }
-
-        .instruction { opacity: 0.7; font-size: 1rem; margin-bottom: 10px; }
+        .result-image { font-size: 7rem; display: block; }
+        .result-text { font-size: 3rem; font-weight: bold; color: yellow; }
     </style>
 </head>
 <body>
 
+<div id="start-overlay">
+    <button id="start-btn">CLICA PARA JOGAR! 🔊</button>
+    <p style="margin-top: 20px;">Ativa o som do tablet</p>
+</div>
+
 <div class="game-world">
     <div id="result-display">
-        <span class="result-image" id="res-img">🥿</span>
-        <span class="result-text" id="res-txt">PÉ</span>
+        <span class="result-image" id="res-img"></span>
+        <span class="result-text" id="res-txt"></span>
     </div>
 
-    <div class="instruction">Arrasta uma vogal para o quadro!</div>
+    <div style="margin-top: 20px;">Leva a vogal até ao P!</div>
 
-    <div class="machine-container" id="machine">
+    <div class="machine-container">
         <div class="consonant-fixed">P</div>
         <div class="vowel-drop-zone" id="target">?</div>
     </div>
 
-    <div class="vowel-carousel" id="carousel">
+    <div class="vowel-carousel">
         <div class="vowel-card" data-vowel="A">A</div>
         <div class="vowel-card" data-vowel="E">E</div>
         <div class="vowel-card" data-vowel="I">I</div>
@@ -95,23 +63,42 @@
 
 <script>
     const data = {
-        'A': { word: 'PÁ', img: '🧹', sound: 'Pá!' },
-        'E': { word: 'PÉ', img: '🦶', sound: 'Pé!' },
-        'I': { word: 'PI', img: '🐥', sound: 'Piu-Piu!' },
-        'O': { word: 'PÓ', img: '☁️', sound: 'Pó!' },
-        'U': { word: 'PU', img: '💨', sound: 'Pum!' }
+        'A': { word: 'PÁ', img: '🧹' },
+        'E': { word: 'PÉ', img: '🦶' },
+        'I': { word: 'PI', img: '🐥' },
+        'O': { word: 'PÓ', img: '☁️' },
+        'U': { word: 'PU', img: '💨' }
     };
 
-    let draggedEl = null;
+    let synth = window.speechSynthesis;
+    let ptVoice = null;
 
-    // Configuração de Voz (PT-PT)
-    function speak(text) {
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = text;
-        msg.lang = 'pt-PT'; // Garante o sotaque de Portugal
-        msg.rate = 0.8;      // Um pouco mais lento para ser didático
-        window.speechSynthesis.speak(msg);
+    // Carregar vozes e tentar encontrar PT-PT
+    function loadVoices() {
+        let voices = synth.getVoices();
+        ptVoice = voices.find(v => v.lang === 'pt-PT') || voices.find(v => v.lang.includes('pt'));
     }
+    loadVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function speak(text) {
+        if (synth.speaking) synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = ptVoice;
+        utterance.lang = 'pt-PT';
+        utterance.rate = 0.7;
+        synth.speak(utterance);
+    }
+
+    // Botão de início para desbloquear áudio
+    document.getElementById('start-btn').addEventListener('click', () => {
+        document.getElementById('start-overlay').style.display = 'none';
+        speak("Vamos brincar!");
+    });
+
+    let draggedEl = null;
 
     document.querySelectorAll('.vowel-card').forEach(card => {
         card.addEventListener('touchstart', (e) => {
@@ -119,11 +106,9 @@
             draggedEl = card.cloneNode(true);
             draggedEl.style.position = 'fixed';
             draggedEl.style.zIndex = '1000';
-            draggedEl.style.left = touch.clientX - 40 + 'px';
-            draggedEl.style.top = touch.clientY - 40 + 'px';
+            draggedEl.style.left = touch.clientX - 35 + 'px';
+            draggedEl.style.top = touch.clientY - 35 + 'px';
             document.body.appendChild(draggedEl);
-            
-            // Falar a letra ao tocar
             speak(card.dataset.vowel);
         });
     });
@@ -131,9 +116,9 @@
     window.addEventListener('touchmove', (e) => {
         if (!draggedEl) return;
         const touch = e.touches[0];
-        draggedEl.style.left = touch.clientX - 40 + 'px';
-        draggedEl.style.top = touch.clientY - 40 + 'px';
-    }, { passive: false });
+        draggedEl.style.left = touch.clientX - 35 + 'px';
+        draggedEl.style.top = touch.clientY - 35 + 'px';
+    });
 
     window.addEventListener('touchend', (e) => {
         if (!draggedEl) return;
@@ -144,34 +129,24 @@
             touch.clientY > target.top && touch.clientY < target.bottom) {
             
             const v = draggedEl.dataset.vowel;
-            processSyllable(v);
+            const targetZone = document.getElementById('target');
+            const resDiv = document.getElementById('result-display');
+            
+            targetZone.innerText = v;
+            document.getElementById('res-img').innerText = data[v].img;
+            document.getElementById('res-txt').innerText = data[v].word;
+            
+            resDiv.classList.add('show');
+            speak(data[v].word);
+
+            setTimeout(() => {
+                resDiv.classList.remove('show');
+                targetZone.innerText = '?';
+            }, 2000);
         }
-        
         draggedEl.remove();
         draggedEl = null;
     });
-
-    function processSyllable(v) {
-        const targetZone = document.getElementById('target');
-        const resDiv = document.getElementById('result-display');
-        
-        targetZone.innerText = v;
-        targetZone.style.color = 'white';
-        
-        // Atualiza feedback
-        document.getElementById('res-img').innerText = data[v].img;
-        document.getElementById('res-txt').innerText = data[v].word;
-        
-        // Animação e Som
-        resDiv.classList.add('show');
-        speak(data[v].word);
-
-        setTimeout(() => {
-            resDiv.classList.remove('show');
-            targetZone.innerText = '?';
-            targetZone.style.color = 'var(--accent)';
-        }, 2500);
-    }
 </script>
 
 </body>
