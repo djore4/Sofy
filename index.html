@@ -3,73 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jogo das Cores</title>
+    <title>Comboio das Letras</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background-color: #f0f0f0; touch-action: manipulation; }
-        .container { display: flex; justify-content: space-around; margin-top: 50px; }
-        .box { width: 100px; height: 100px; border: 5px dashed #333; border-radius: 15px; }
-        .circle { width: 80px; height: 80px; border-radius: 50%; display: inline-block; margin: 20px; cursor: pointer; touch-action: none; }
-        #message { font-size: 24px; color: green; margin-top: 20px; height: 30px; }
+        body { 
+            font-family: 'Comic Sans MS', cursive, sans-serif; 
+            text-align: center; 
+            background-color: #e0f7fa; 
+            margin: 0; 
+            overflow: hidden;
+            touch-action: none;
+        }
+        h1 { color: #0277bd; font-size: 1.5rem; margin: 10px; }
         
-        /* Cores */
-        .red { background-color: #ff4d4d; }
-        .blue { background-color: #4da6ff; }
-        .yellow { background-color: #ffdb4d; }
+        /* Área de Destino (Vagão) */
+        .train-area {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            width: 80%;
+            border: 4px solid #0277bd;
+            border-radius: 20px;
+            min-height: 120px;
+            align-items: center;
+        }
+
+        .slot {
+            width: 80px;
+            height: 100px;
+            border: 3px dashed #b3e5fc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #0277bd;
+        }
+
+        /* Letras para arrastar */
+        .alphabet {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .letter {
+            width: 70px;
+            height: 70px;
+            background-color: #ffca28;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 5px #f57f17;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #feedback {
+            font-size: 2rem;
+            height: 50px;
+            color: #e91e63;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Leva cada cor à sua casinha!</h1>
+    <h1>Junta as Letrinhas!</h1>
     
-    <div class="container">
-        <div class="box" id="target-red" style="border-color: #ff4d4d;"></div>
-        <div class="box" id="target-blue" style="border-color: #4da6ff;"></div>
-        <div class="box" id="target-yellow" style="border-color: #ffdb4d;"></div>
+    <div class="train-area" id="drop-zone">
+        <div class="slot" id="slot1">?</div>
+        <div class="slot" id="slot2">?</div>
     </div>
 
-    <div id="pieces">
-        <div class="circle red" draggable="true" id="red-circle"></div>
-        <div class="circle yellow" draggable="true" id="yellow-circle"></div>
-        <div class="circle blue" draggable="true" id="blue-circle"></div>
-    </div>
+    <div id="feedback"></div>
 
-    <div id="message"></div>
+    <div class="alphabet" id="letters-container">
+        <div class="letter" data-char="B">B</div>
+        <div class="letter" data-char="P">P</div>
+        <div class="letter" data-char="M">M</div>
+        <div class="letter" data-char="A" style="background-color: #66bb6a; box-shadow: 0 5px #388e3c;">A</div>
+        <div class="letter" data-char="E" style="background-color: #66bb6a; box-shadow: 0 5px #388e3c;">E</div>
+        <div class="letter" data-char="O" style="background-color: #66bb6a; box-shadow: 0 5px #388e3c;">O</div>
+    </div>
 
     <script>
-        // Lógica simplificada para Tablet (Touch)
-        const circles = document.querySelectorAll('.circle');
-        const boxes = document.querySelectorAll('.box');
+        let currentSlot = 1;
+        const feedback = document.getElementById('feedback');
+        const slots = { 1: document.getElementById('slot1'), 2: document.getElementById('slot2') };
 
-        circles.forEach(circle => {
-            circle.addEventListener('touchstart', handleTouchStart);
-            circle.addEventListener('touchmove', handleTouchMove);
-            circle.addEventListener('touchend', handleTouchEnd);
+        document.querySelectorAll('.letter').forEach(letter => {
+            letter.addEventListener('touchstart', handleStart);
+            letter.addEventListener('touchmove', handleMove);
+            letter.addEventListener('touchend', handleEnd);
         });
 
-        let activeCircle = null;
+        let startX, startY;
 
-        function handleTouchStart(e) { activeCircle = e.target; }
-
-        function handleTouchMove(e) {
-            e.preventDefault();
-            let touch = e.touches[0];
-            activeCircle.style.position = 'absolute';
-            activeCircle.style.left = touch.pageX - 40 + 'px';
-            activeCircle.style.top = touch.pageY - 40 + 'px';
+        function handleStart(e) {
+            const touch = e.touches[0];
+            startX = touch.pageX - e.target.offsetLeft;
+            startY = touch.pageY - e.target.offsetTop;
+            e.target.style.zIndex = 1000;
         }
 
-        function handleTouchEnd(e) {
-            let touch = e.changedTouches[0];
-            let target = document.elementFromPoint(touch.clientX, touch.clientY);
-            
-            if (target && target.id === 'target-' + activeCircle.classList[1]) {
-                target.style.backgroundColor = getComputedStyle(activeCircle).backgroundColor;
-                activeCircle.style.display = 'none';
-                document.getElementById('message').innerText = "Boa! Acertaste! 🎉";
-                setTimeout(() => { document.getElementById('message').innerText = ""; }, 2000);
+        function handleMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const target = e.target;
+            target.style.position = 'absolute';
+            target.style.left = (touch.pageX - 35) + 'px';
+            target.style.top = (touch.pageY - 35) + 'px';
+        }
+
+        function handleEnd(e) {
+            const touch = e.changedTouches[0];
+            const dropZone = document.getElementById('drop-zone').getBoundingClientRect();
+            const char = e.target.getAttribute('data-char');
+
+            if (touch.clientX > dropZone.left && touch.clientX < dropZone.right &&
+                touch.clientY > dropZone.top && touch.clientY < dropZone.bottom) {
+                
+                slots[currentSlot].innerText = char;
+                e.target.style.display = 'none';
+                
+                if (currentSlot === 1) {
+                    currentSlot = 2;
+                } else {
+                    checkWord();
+                    setTimeout(resetGame, 2000);
+                }
             } else {
-                activeCircle.style.position = 'static';
+                e.target.style.position = 'static';
             }
+        }
+
+        function checkWord() {
+            const word = slots[1].innerText + slots[2].innerText;
+            const validWords = {
+                'BA': 'BA-TA-TAS!',
+                'BO': 'BO-LA!',
+                'PA': 'PÁ!',
+                'PE': 'PÉ!',
+                'MA': 'MAMÃ!',
+                'ME': 'MEU!'
+            };
+
+            if (validWords[word]) {
+                feedback.innerText = "Boa! Formaste " + validWords[word] + " 🎉";
+            } else {
+                feedback.innerText = "Conseguiste juntar as letras! ✨";
+            }
+        }
+
+        function resetGame() {
+            slots[1].innerText = "?";
+            slots[2].innerText = "?";
+            currentSlot = 1;
+            feedback.innerText = "";
+            document.querySelectorAll('.letter').forEach(l => {
+                l.style.display = 'flex';
+                l.style.position = 'static';
+            });
         }
     </script>
 </body>
