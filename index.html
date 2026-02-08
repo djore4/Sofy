@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Máquina de Sílabas - Fonética Corrigida</title>
+    <title>Máquina de Sílabas - Fonética PT-PT Final</title>
     <style>
         :root { --machine-color: #333; --neon-blue: #00fbff; --accent: #ff007a; --bg: #1a1a1a; }
         body { margin: 0; padding: 0; font-family: 'Comic Sans MS', sans-serif; background: var(--bg); color: white; overflow: hidden; touch-action: none; text-align: center; }
@@ -90,7 +90,7 @@
 <script>
     const consonants = ['B', 'D', 'F', 'G', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V'];
     
-    // Dicionário expandido para garantir a fonética correta em PT-PT
+    // Mapeamento fonético rigoroso para PT-PT
     const dictionary = {
         'B': { A:'BÁ', E:'BÉ', I:'BI', O:'BÓ', U:'BU', img:'🔔' },
         'P': { A:'PÁ', E:'PÉ', I:'PI', O:'PÓ', U:'PU', img:'🦶' },
@@ -100,21 +100,30 @@
         'V': { A:'VÁ', E:'VÉ', I:'VI', O:'VÓ', U:'VU', img:'🌪️' },
         'D': { A:'DÁ', E:'DÉ', I:'DI', O:'DÓ', U:'DU', img:'🎲' },
         'F': { A:'FÁ', E:'FÉ', I:'FI', O:'FÓ', U:'FU', img:'🔥' },
-        'S': { A:'SÁ', E:'SÉ', I:'SI', O:'SÓ', U:'SU', img:'🐍' }
+        'S': { A:'SÁ', E:'SÉ', I:'SI', O:'SÓ', U:'SU', img:'🐍' },
+        'N': { A:'NÁ', E:'NÉ', I:'NI', O:'NÓ', U:'NU', img:'🔢' },
+        'R': { A:'RÁ', E:'RÉ', I:'RI', O:'RÓ', U:'RU', img:'🚗' }
     };
 
     let activeConsonant = 'V';
     let synth = window.speechSynthesis;
 
+    // Função para converter letras em sons abertos de Portugal
+    function getPhoneticSound(text) {
+        return text.replace(/A/g, 'Á').replace(/E/g, 'É').replace(/O/g, 'Ó');
+    }
+
     function speak(text) {
         synth.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         const voices = synth.getVoices();
-        const ptPtVoice = voices.find(v => v.lang === 'pt-PT' || v.lang === 'pt_PT');
+        // Procura vozes PT-PT explicitamente
+        const ptPtVoice = voices.find(v => v.lang === 'pt-PT' || v.lang === 'pt_PT' || (v.lang.startsWith('pt') && v.name.includes('Portugal')));
         
         if (ptPtVoice) utterance.voice = ptPtVoice;
         utterance.lang = 'pt-PT';
-        utterance.rate = 0.65; // Ligeiramente mais lento para evitar a "colagem" de nomes de letras
+        utterance.rate = 0.6; // Reduzido para maior clareza silábica
+        utterance.pitch = 1.0;
         synth.speak(utterance);
     }
 
@@ -144,11 +153,8 @@
             draggedEl.style.top = touch.clientY - 35 + 'px';
             document.body.appendChild(draggedEl);
             
-            // Forçamos a pronúncia aberta da vogal para não confundir com o nome em inglês
-            let sound = card.dataset.vowel;
-            if(sound === 'E') sound = 'É'; 
-            if(sound === 'O') sound = 'Ó';
-            speak("Letra " + sound);
+            // Requisito: "Letra Á", "Letra É", "Letra Ó" (sons abertos)
+            speak("Letra " + getPhoneticSound(card.dataset.vowel));
         });
     });
 
@@ -169,12 +175,12 @@
             
             const v = draggedEl.dataset.vowel;
             
-            // Lógica de aglutinação forçada para evitar nomes de letras individuais
-            let syllable = "";
+            // Busca no dicionário ou fabrica o som com fonética aberta
+            let soundToPlay = "";
             if (dictionary[activeConsonant] && dictionary[activeConsonant][v]) {
-                syllable = dictionary[activeConsonant][v];
+                soundToPlay = dictionary[activeConsonant][v];
             } else {
-                syllable = activeConsonant + (v === 'E' ? 'É' : v === 'O' ? 'Ó' : v);
+                soundToPlay = activeConsonant + getPhoneticSound(v);
             }
             
             const targetZone = document.getElementById('target');
@@ -182,10 +188,10 @@
             
             targetZone.innerText = v;
             document.getElementById('res-img').innerText = (dictionary[activeConsonant] && dictionary[activeConsonant].img) || '✨';
-            document.getElementById('res-txt').innerText = syllable.replace('É', 'E').replace('Ó', 'O'); // Mostra visualmente sem acento se não for necessário
+            document.getElementById('res-txt').innerText = activeConsonant + v;
             
             resDiv.classList.add('show');
-            speak(syllable);
+            speak(soundToPlay);
 
             setTimeout(() => {
                 resDiv.classList.remove('show');
