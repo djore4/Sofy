@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Máquina de Sílabas - PT Fix</title>
+    <title>Máquina de Sílabas - Fonética Corrigida</title>
     <style>
         :root { --machine-color: #333; --neon-blue: #00fbff; --accent: #ff007a; --bg: #1a1a1a; }
         body { margin: 0; padding: 0; font-family: 'Comic Sans MS', sans-serif; background: var(--bg); color: white; overflow: hidden; touch-action: none; text-align: center; }
@@ -74,7 +74,7 @@
     <button id="random-btn">TROCAR LETRA 🎲</button>
 
     <div class="machine-container">
-        <div class="consonant-fixed" id="main-consonant">P</div>
+        <div class="consonant-fixed" id="main-consonant">V</div>
         <div class="vowel-drop-zone" id="target">?</div>
     </div>
 
@@ -89,35 +89,32 @@
 
 <script>
     const consonants = ['B', 'D', 'F', 'G', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V'];
+    
+    // Dicionário expandido para garantir a fonética correta em PT-PT
     const dictionary = {
         'B': { A:'BÁ', E:'BÉ', I:'BI', O:'BÓ', U:'BU', img:'🔔' },
         'P': { A:'PÁ', E:'PÉ', I:'PI', O:'PÓ', U:'PU', img:'🦶' },
         'M': { A:'MÁ', E:'MÉ', I:'MI', O:'MÓ', U:'MU', img:'🐮' },
         'L': { A:'LÁ', E:'LÉ', I:'LI', O:'LÓ', U:'LU', img:'🌙' },
-        'T': { A:'TÁ', E:'TÉ', I:'TI', O:'TÓ', U:'TU', img:'🚂' }
+        'T': { A:'TÁ', E:'TÉ', I:'TI', O:'TÓ', U:'TU', img:'🚂' },
+        'V': { A:'VÁ', E:'VÉ', I:'VI', O:'VÓ', U:'VU', img:'🌪️' },
+        'D': { A:'DÁ', E:'DÉ', I:'DI', O:'DÓ', U:'DU', img:'🎲' },
+        'F': { A:'FÁ', E:'FÉ', I:'FI', O:'FÓ', U:'FU', img:'🔥' },
+        'S': { A:'SÁ', E:'SÉ', I:'SI', O:'SÓ', U:'SU', img:'🐍' }
     };
 
-    let activeConsonant = 'P';
+    let activeConsonant = 'V';
     let synth = window.speechSynthesis;
 
     function speak(text) {
-        // Cancelar qualquer fala anterior imediatamente
         synth.cancel();
-
         const utterance = new SpeechSynthesisUtterance(text);
-        
-        // Tentar encontrar a melhor voz PT-PT disponível no momento
         const voices = synth.getVoices();
         const ptPtVoice = voices.find(v => v.lang === 'pt-PT' || v.lang === 'pt_PT');
         
-        if (ptPtVoice) {
-            utterance.voice = ptPtVoice;
-        }
-
+        if (ptPtVoice) utterance.voice = ptPtVoice;
         utterance.lang = 'pt-PT';
-        utterance.rate = 0.7; // Velocidade mais lenta para clareza didática
-        utterance.pitch = 1.1; // Tom ligeiramente mais infantil/agradável
-        
+        utterance.rate = 0.65; // Ligeiramente mais lento para evitar a "colagem" de nomes de letras
         synth.speak(utterance);
     }
 
@@ -141,15 +138,17 @@
         card.addEventListener('touchstart', (e) => {
             const touch = e.touches[0];
             draggedEl = card.cloneNode(true);
-            draggedEl.className = 'vowel-card'; // Garantir estilo original
             draggedEl.style.position = 'fixed';
             draggedEl.style.zIndex = '1000';
             draggedEl.style.left = touch.clientX - 35 + 'px';
             draggedEl.style.top = touch.clientY - 35 + 'px';
             document.body.appendChild(draggedEl);
             
-            // Força a pronúncia "Letra E" de Portugal
-            speak("Letra " + card.dataset.vowel);
+            // Forçamos a pronúncia aberta da vogal para não confundir com o nome em inglês
+            let sound = card.dataset.vowel;
+            if(sound === 'E') sound = 'É'; 
+            if(sound === 'O') sound = 'Ó';
+            speak("Letra " + sound);
         });
     });
 
@@ -169,16 +168,21 @@
             touch.clientY > target.top && touch.clientY < target.bottom) {
             
             const v = draggedEl.dataset.vowel;
-            const syllable = (dictionary[activeConsonant] && dictionary[activeConsonant][v]) 
-                             ? dictionary[activeConsonant][v] 
-                             : activeConsonant + v;
+            
+            // Lógica de aglutinação forçada para evitar nomes de letras individuais
+            let syllable = "";
+            if (dictionary[activeConsonant] && dictionary[activeConsonant][v]) {
+                syllable = dictionary[activeConsonant][v];
+            } else {
+                syllable = activeConsonant + (v === 'E' ? 'É' : v === 'O' ? 'Ó' : v);
+            }
             
             const targetZone = document.getElementById('target');
             const resDiv = document.getElementById('result-display');
             
             targetZone.innerText = v;
             document.getElementById('res-img').innerText = (dictionary[activeConsonant] && dictionary[activeConsonant].img) || '✨';
-            document.getElementById('res-txt').innerText = syllable;
+            document.getElementById('res-txt').innerText = syllable.replace('É', 'E').replace('Ó', 'O'); // Mostra visualmente sem acento se não for necessário
             
             resDiv.classList.add('show');
             speak(syllable);
@@ -192,10 +196,7 @@
         draggedEl = null;
     });
 
-    // Pré-carregamento das vozes (importante para browsers mobile)
-    window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-    };
+    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
 </script>
 
 </body>
