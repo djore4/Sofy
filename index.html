@@ -3,178 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Comboio das Letras</title>
+    <title>Super Letras - Fábrica de Sílabas</title>
     <style>
-        body { 
-            font-family: 'Comic Sans MS', cursive, sans-serif; 
-            text-align: center; 
-            background-color: #e0f7fa; 
-            margin: 0; 
-            overflow: hidden;
-            touch-action: none;
-        }
-        h1 { color: #0277bd; font-size: 1.5rem; margin: 10px; }
-        
-        /* Área de Destino (Vagão) */
-        .train-area {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #fff;
-            width: 80%;
-            border: 4px solid #0277bd;
-            border-radius: 20px;
-            min-height: 120px;
-            align-items: center;
+        :root {
+            --bg: #1a1a2e;
+            --primary: #4ecca3;
+            --secondary: #45b7d1;
+            --vowel: #ff4e50;
+            --consonant: #f9d423;
         }
 
-        .slot {
-            width: 80px;
-            height: 100px;
-            border: 3px dashed #b3e5fc;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: bold;
-            color: #0277bd;
+        body {
+            margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: white; overflow: hidden; touch-action: none;
         }
 
-        /* Letras para arrastar */
-        .alphabet {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            padding: 20px;
+        #game-canvas {
+            display: flex; flex-direction: column; align-items: center; height: 100vh;
+            background: radial-gradient(circle, #232946 0%, #1a1a2e 100%);
         }
 
-        .letter {
-            width: 70px;
-            height: 70px;
-            background-color: #ffca28;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 5px #f57f17;
-            cursor: pointer;
+        /* Área de Aglutinação */
+        .fusion-chamber {
+            margin-top: 50px; width: 300px; height: 150px;
+            border: 4px solid var(--primary); border-radius: 30px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.05); box-shadow: 0 0 20px var(--primary);
             position: relative;
         }
 
-        #feedback {
-            font-size: 2rem;
-            height: 50px;
-            color: #e91e63;
-            font-weight: bold;
+        .fusion-chamber::after {
+            content: 'SOLTA AS LETRAS AQUI'; position: absolute; bottom: -30px;
+            font-size: 12px; opacity: 0.6; letter-spacing: 2px;
+        }
+
+        /* Slots de Letras */
+        .slot {
+            width: 80px; height: 100px; margin: 0 10px;
+            border-radius: 15px; background: rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 4rem; font-weight: 900; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Contentor do Alfabeto */
+        .alphabet-tray {
+            position: absolute; bottom: 20px; width: 95%;
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;
+            padding: 15px; background: rgba(255,255,255,0.1);
+            border-radius: 20px; backdrop-filter: blur(5px);
+        }
+
+        .letter {
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: bold; border-radius: 12px;
+            cursor: pointer; transition: transform 0.1s; user-select: none;
+        }
+
+        .vowel { background: var(--vowel); box-shadow: 0 5px #a32a2c; }
+        .consonant { background: var(--consonant); color: #333; box-shadow: 0 5px #c2a01a; }
+
+        /* Animações */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success { animation: pop 0.5s ease; color: #fff !important; }
+
+        #result-popup {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            background: white; color: #333; padding: 30px; border-radius: 30px;
+            text-align: center; font-size: 2rem; transition: 0.3s; z-index: 2000;
         }
     </style>
 </head>
 <body>
 
-    <h1>Junta as Letrinhas!</h1>
-    
-    <div class="train-area" id="drop-zone">
-        <div class="slot" id="slot1">?</div>
-        <div class="slot" id="slot2">?</div>
+<div id="game-canvas">
+    <div class="fusion-chamber" id="target">
+        <div class="slot" id="s1"></div>
+        <div class="slot" id="s2"></div>
     </div>
 
-    <div id="feedback"></div>
+    <div id="result-popup">BOA!</div>
 
-    <div class="alphabet" id="letters-container">
-        <div class="letter" data-char="B">B</div>
-        <div class="letter" data-char="P">P</div>
-        <div class="letter" data-char="M">M</div>
-        <div class="letter" data-char="A" style="background-color: #66bb6a; box-shadow: 0 5px #388e3c;">A</div>
-        <div class="letter" data-char="E" style="background-color: #66bb6a; box-shadow: 0 5px #388e3c;">E</div>
-        <div class="letter" data-char="O" style="background-color: #66bb6a; box-shadow: 0 5px #388e3c;">O</div>
-    </div>
+    <div class="alphabet-tray" id="tray">
+        </div>
+</div>
 
-    <script>
-        let currentSlot = 1;
-        const feedback = document.getElementById('feedback');
-        const slots = { 1: document.getElementById('slot1'), 2: document.getElementById('slot2') };
+<script>
+    const vowels = ['A', 'E', 'I', 'O', 'U'];
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const tray = document.getElementById('tray');
+    const slots = [document.getElementById('s1'), document.getElementById('s2')];
+    let currentSlot = 0;
 
-        document.querySelectorAll('.letter').forEach(letter => {
-            letter.addEventListener('touchstart', handleStart);
-            letter.addEventListener('touchmove', handleMove);
-            letter.addEventListener('touchend', handleEnd);
-        });
+    // Criar as letras no tabuleiro
+    alphabet.forEach(char => {
+        const div = document.createElement('div');
+        div.className = `letter ${vowels.includes(char) ? 'vowel' : 'consonant'}`;
+        div.innerText = char;
+        div.addEventListener('touchstart', startDrag);
+        tray.appendChild(div);
+    });
 
-        let startX, startY;
+    let draggedEl = null;
 
-        function handleStart(e) {
-            const touch = e.touches[0];
-            startX = touch.pageX - e.target.offsetLeft;
-            startY = touch.pageY - e.target.offsetTop;
-            e.target.style.zIndex = 1000;
-        }
+    function startDrag(e) {
+        const touch = e.touches[0];
+        draggedEl = e.target.cloneNode(true);
+        draggedEl.style.position = 'fixed';
+        draggedEl.style.width = '70px';
+        draggedEl.style.zIndex = '1000';
+        draggedEl.style.left = touch.clientX - 35 + 'px';
+        draggedEl.style.top = touch.clientY - 35 + 'px';
+        document.body.appendChild(draggedEl);
 
-        function handleMove(e) {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const target = e.target;
-            target.style.position = 'absolute';
-            target.style.left = (touch.pageX - 35) + 'px';
-            target.style.top = (touch.pageY - 35) + 'px';
-        }
+        const move = (me) => {
+            const mt = me.touches[0];
+            draggedEl.style.left = mt.clientX - 35 + 'px';
+            draggedEl.style.top = mt.clientY - 35 + 'px';
+        };
 
-        function handleEnd(e) {
-            const touch = e.changedTouches[0];
-            const dropZone = document.getElementById('drop-zone').getBoundingClientRect();
-            const char = e.target.getAttribute('data-char');
+        const end = (ee) => {
+            const et = ee.changedTouches[0];
+            const targetRect = document.getElementById('target').getBoundingClientRect();
 
-            if (touch.clientX > dropZone.left && touch.clientX < dropZone.right &&
-                touch.clientY > dropZone.top && touch.clientY < dropZone.bottom) {
+            if (et.clientX > targetRect.left && et.clientX < targetRect.right &&
+                et.clientY > targetRect.top && et.clientY < targetRect.bottom) {
                 
-                slots[currentSlot].innerText = char;
-                e.target.style.display = 'none';
-                
-                if (currentSlot === 1) {
-                    currentSlot = 2;
-                } else {
-                    checkWord();
-                    setTimeout(resetGame, 2000);
-                }
-            } else {
-                e.target.style.position = 'static';
+                fillSlot(draggedEl.innerText);
+            }
+            
+            draggedEl.remove();
+            window.removeEventListener('touchmove', move);
+            window.removeEventListener('touchend', end);
+        };
+
+        window.addEventListener('touchmove', move, {passive: false});
+        window.addEventListener('touchend', end);
+    }
+
+    function fillSlot(char) {
+        if (currentSlot < 2) {
+            slots[currentSlot].innerText = char;
+            slots[currentSlot].classList.add('success');
+            currentSlot++;
+            
+            if (currentSlot === 2) {
+                showResult();
             }
         }
+    }
 
-        function checkWord() {
-            const word = slots[1].innerText + slots[2].innerText;
-            const validWords = {
-                'BA': 'BA-TA-TAS!',
-                'BO': 'BO-LA!',
-                'PA': 'PÁ!',
-                'PE': 'PÉ!',
-                'MA': 'MAMÃ!',
-                'ME': 'MEU!'
-            };
+    function showResult() {
+        const word = slots[0].innerText + slots[1].innerText;
+        const popup = document.getElementById('result-popup');
+        popup.innerText = `CONSEGUISTE!\n${word}`;
+        popup.style.transform = 'translate(-50%, -50%) scale(1)';
+        
+        setTimeout(() => {
+            popup.style.transform = 'translate(-50%, -50%) scale(0)';
+            slots[0].innerText = '';
+            slots[1].innerText = '';
+            slots[0].classList.remove('success');
+            slots[1].classList.remove('success');
+            currentSlot = 0;
+        }, 2000);
+    }
+</script>
 
-            if (validWords[word]) {
-                feedback.innerText = "Boa! Formaste " + validWords[word] + " 🎉";
-            } else {
-                feedback.innerText = "Conseguiste juntar as letras! ✨";
-            }
-        }
-
-        function resetGame() {
-            slots[1].innerText = "?";
-            slots[2].innerText = "?";
-            currentSlot = 1;
-            feedback.innerText = "";
-            document.querySelectorAll('.letter').forEach(l => {
-                l.style.display = 'flex';
-                l.style.position = 'static';
-            });
-        }
-    </script>
 </body>
 </html>
