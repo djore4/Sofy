@@ -1,0 +1,17 @@
+{
+  "appId": "com.sofy.aprenderabrincar",
+  "appName": "Aprender a Brincar",
+  "webDir": "www",
+  "backgroundColor": "#E9F6FF",
+  "android": {
+    "backgroundColor": "#E9F6FF"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#E9F6FF",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    }
+  }
+}
