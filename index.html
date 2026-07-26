@@ -198,7 +198,7 @@
         <button id="syl-random">Trocar letra 🎲</button>
         <div class="machine">
             <span class="bulb l"></span><span class="bulb r"></span>
-            <div class="consonant" id="syl-con">V</div>
+            <div class="consonant" id="syl-con">B</div>
             <div class="drop" id="syl-drop">?</div>
         </div>
         <div class="vowels">
@@ -507,6 +507,203 @@ const ART = {
     <circle cx="86" cy="102" r="2.5" fill="#a52a5c"/><circle cx="114" cy="102" r="2.5" fill="#a52a5c"/>
     <path d="M86 118 Q100 128 114 118" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>`,
 
+  /* ---- Palavras das sílabas ---- */
+  lapis:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF7DE"/><stop offset="1" stop-color="#FFECB0"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD65A"/><stop offset="1" stop-color="#F5B01E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <g transform="rotate(45 100 100)"><rect x="82" y="40" width="36" height="104" rx="6" fill="url(#bd)" stroke="#E09B12" stroke-width="3"/>
+    <rect x="82" y="40" width="36" height="20" fill="#FF7AA8"/><rect x="82" y="52" width="36" height="8" fill="#f2f2f2"/>
+    <polygon points="82,144 118,144 100,176" fill="#F6E1C4" stroke="#c9a24b" stroke-width="2"/><polygon points="90,160 110,160 100,176" fill="#3a2f2a"/></g></svg>`,
+  limao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FBFFE0"/><stop offset="1" stop-color="#EDF7B8"/></radialGradient>
+    <radialGradient id="bd" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#FFF06B"/><stop offset="1" stop-color="#E9C21E"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <ellipse cx="100" cy="108" rx="58" ry="50" fill="url(#bd)" stroke="#c9a11a" stroke-width="3"/>
+    <circle cx="150" cy="70" r="8" fill="#FFF06B" stroke="#c9a11a" stroke-width="2"/>
+    <path d="M126 52 q20 -8 30 6 q-20 10 -30 -2 Z" fill="#4CAF50" stroke="#3a8a3d" stroke-width="2"/>
+    <ellipse cx="78" cy="92" rx="12" ry="16" fill="#fff" opacity=".35"/></svg>`,
+  lobo:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EEF2F8"/><stop offset="1" stop-color="#D6DEEA"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9B4C0"/><stop offset="1" stop-color="#7E8B99"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="54,72 60,34 92,60" fill="url(#bd)"/><polygon points="146,72 140,34 108,60" fill="url(#bd)"/>
+    <circle cx="100" cy="104" r="52" fill="url(#bd)" stroke="#6b7885" stroke-width="3"/>
+    <path d="M100 88 L74 118 Q88 140 100 140 Q112 140 126 118 Z" fill="#E8ECF1"/>
+    <circle cx="84" cy="96" r="6.5" fill="#2a2f36"/><circle cx="116" cy="96" r="6.5" fill="#2a2f36"/>
+    <ellipse cx="100" cy="118" rx="10" ry="7" fill="#2a2f36"/><path d="M100 125 L100 134" stroke="#2a2f36" stroke-width="4"/>
+    <path d="M100 134 Q90 140 86 132 M100 134 Q110 140 114 132" fill="none" stroke="#2a2f36" stroke-width="3.5" stroke-linecap="round"/></svg>`,
+  melao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EEFBE4"/><stop offset="1" stop-color="#D3F0C0"/></radialGradient>
+    <radialGradient id="bd" cx="42%" cy="36%" r="70%"><stop offset="0" stop-color="#9BD86B"/><stop offset="1" stop-color="#5DA83C"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="100" cy="104" r="60" fill="url(#bd)" stroke="#4d922f" stroke-width="3"/>
+    <g stroke="#3f7d27" stroke-width="3" fill="none" opacity=".7"><path d="M100 46 Q86 104 100 162"/><path d="M60 64 Q80 104 60 144"/><path d="M140 64 Q120 104 140 144"/></g>
+    <ellipse cx="80" cy="80" rx="12" ry="18" fill="#fff" opacity=".3"/></svg>`,
+  milho:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFFBE0"/><stop offset="1" stop-color="#FFF0AE"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE267"/><stop offset="1" stop-color="#F5C21E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M60 62 Q100 34 140 62 Q150 120 100 170 Q50 120 60 62 Z" fill="#7BD16B"/>
+    <ellipse cx="100" cy="104" rx="34" ry="60" fill="url(#bd)" stroke="#E0A712" stroke-width="3"/>
+    <g fill="#E0A712"><circle cx="88" cy="72" r="5"/><circle cx="100" cy="68" r="5"/><circle cx="112" cy="72" r="5"/><circle cx="84" cy="94" r="5"/><circle cx="96" cy="90" r="5"/><circle cx="108" cy="92" r="5"/><circle cx="118" cy="96" r="5"/><circle cx="88" cy="116" r="5"/><circle cx="100" cy="112" r="5"/><circle cx="112" cy="116" r="5"/><circle cx="94" cy="138" r="5"/><circle cx="106" cy="136" r="5"/></g></svg>`,
+  morango:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFEFF1"/><stop offset="1" stop-color="#FFD6DD"/></radialGradient>
+    <radialGradient id="bd" cx="42%" cy="34%" r="72%"><stop offset="0" stop-color="#FF6B6B"/><stop offset="1" stop-color="#D62839"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M100 74 C64 74 52 102 60 128 C68 154 88 170 100 170 C112 170 132 154 140 128 C148 102 136 74 100 74 Z" fill="url(#bd)" stroke="#b52836" stroke-width="3"/>
+    <path d="M100 78 L82 52 M100 78 L118 52 M100 78 L100 46 M100 78 L70 64 M100 78 L130 64" stroke="#3a8a3d" stroke-width="7" stroke-linecap="round"/>
+    <g fill="#FFE07A"><circle cx="86" cy="104" r="3"/><circle cx="110" cy="102" r="3"/><circle cx="98" cy="122" r="3"/><circle cx="120" cy="124" r="3"/><circle cx="78" cy="128" r="3"/><circle cx="100" cy="144" r="3"/></g></svg>`,
+  musica:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F3EEFF"/><stop offset="1" stop-color="#E1D6FF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9E8CFF"/><stop offset="1" stop-color="#7A66E6"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <rect x="112" y="48" width="12" height="86" rx="6" fill="url(#bd)"/><rect x="62" y="62" width="12" height="80" rx="6" fill="url(#bd)"/>
+    <path d="M74 62 L124 48 L124 68 L74 82 Z" fill="url(#bd)"/>
+    <ellipse cx="58" cy="142" rx="20" ry="15" fill="url(#bd)" stroke="#6b5ad1" stroke-width="2"/><ellipse cx="108" cy="134" rx="20" ry="15" fill="url(#bd)" stroke="#6b5ad1" stroke-width="2"/>
+    <circle cx="150" cy="70" r="6" fill="#FFD23F"/><circle cx="42" cy="98" r="5" fill="#FF7AA8"/></svg>`,
+  rei:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF8DC"/><stop offset="1" stop-color="#FFEBA8"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE164"/><stop offset="1" stop-color="#F5B301"/></linearGradient>
+    <linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE0BD"/><stop offset="1" stop-color="#F6C89B"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="100" cy="122" r="46" fill="url(#sk)" stroke="#e0a76f" stroke-width="2"/>
+    <path d="M52 86 L64 110 L82 90 L100 114 L118 90 L136 110 L148 86 L148 98 L52 98 Z" fill="url(#bd)" stroke="#D98E12" stroke-width="3"/>
+    <circle cx="52" cy="84" r="6" fill="#FF6B6B"/><circle cx="100" cy="82" r="6" fill="#4FC3F7"/><circle cx="148" cy="84" r="6" fill="#4CC36B"/>
+    <circle cx="86" cy="122" r="5" fill="#3a2f2a"/><circle cx="114" cy="122" r="5" fill="#3a2f2a"/>
+    <path d="M86 136 Q100 148 114 136" fill="none" stroke="#3a2f2a" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="74" cy="132" r="6" fill="#FF97A8" opacity=".5"/><circle cx="126" cy="132" r="6" fill="#FF97A8" opacity=".5"/></svg>`,
+  rio:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#E6FAFF"/><stop offset="1" stop-color="#C6EEFB"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="150" cy="58" r="14" fill="#FFD23F"/>
+    <path d="M44 76 q14 -10 28 0 t28 0 t28 0 t28 0 v14 q-14 10 -28 0 t-28 0 t-28 0 t-28 0 Z" fill="#4FC3F7"/>
+    <path d="M44 106 q14 -10 28 0 t28 0 t28 0 t28 0 v14 q-14 10 -28 0 t-28 0 t-28 0 t-28 0 Z" fill="#2FA9DE"/>
+    <path d="M44 136 q14 -10 28 0 t28 0 t28 0 t28 0 v14 q-14 10 -28 0 t-28 0 t-28 0 t-28 0 Z" fill="#4FC3F7"/>
+    <ellipse cx="40" cy="152" rx="26" ry="14" fill="#7BD16B"/><ellipse cx="160" cy="152" rx="26" ry="14" fill="#7BD16B"/></svg>`,
+  robo:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EEF3F8"/><stop offset="1" stop-color="#D6E2EC"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9AD3E8"/><stop offset="1" stop-color="#4FB0D4"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <line x1="100" y1="40" x2="100" y2="56" stroke="#7a8892" stroke-width="4"/><circle cx="100" cy="36" r="8" fill="#FF6B6B"/>
+    <rect x="54" y="56" width="92" height="80" rx="16" fill="url(#bd)" stroke="#3f93b5" stroke-width="3"/>
+    <rect x="70" y="74" width="60" height="34" rx="8" fill="#083b4a"/>
+    <circle cx="86" cy="91" r="8" fill="#7CFCE0"/><circle cx="114" cy="91" r="8" fill="#7CFCE0"/>
+    <rect x="80" y="118" width="40" height="8" rx="4" fill="#3f93b5"/>
+    <rect x="66" y="140" width="68" height="30" rx="8" fill="#8FA0AC"/>
+    <rect x="40" y="96" width="14" height="30" rx="6" fill="#8FA0AC"/><rect x="146" y="96" width="14" height="30" rx="6" fill="#8FA0AC"/></svg>`,
+  rua:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EAF3FF"/><stop offset="1" stop-color="#D2E4FB"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="150" cy="52" r="12" fill="#FFD23F"/>
+    <rect x="24" y="120" width="152" height="52" fill="#7A828C"/>
+    <line x1="30" y1="146" x2="170" y2="146" stroke="#FFD23F" stroke-width="5" stroke-dasharray="14 12"/>
+    <rect x="50" y="70" width="44" height="54" fill="#FFCF7A" stroke="#d99a3a" stroke-width="2"/><polygon points="72,44 96,72 48,72" fill="#E4572E"/><rect x="64" y="92" width="16" height="32" fill="#8B5A2B"/>
+    <rect x="108" y="82" width="44" height="42" fill="#9BDDF5" stroke="#3aa9d4" stroke-width="2"/><polygon points="130,58 154,84 106,84" fill="#8E7CFF"/><rect x="122" y="100" width="16" height="24" fill="#5a4a34"/></svg>`,
+  sapo:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EEFBE4"/><stop offset="1" stop-color="#D0EFBF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8BD86B"/><stop offset="1" stop-color="#57A83C"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="66" cy="70" r="22" fill="url(#bd)" stroke="#4d922f" stroke-width="3"/><circle cx="134" cy="70" r="22" fill="url(#bd)" stroke="#4d922f" stroke-width="3"/>
+    <circle cx="66" cy="66" r="9" fill="#fff"/><circle cx="66" cy="66" r="4.5" fill="#111"/><circle cx="134" cy="66" r="9" fill="#fff"/><circle cx="134" cy="66" r="4.5" fill="#111"/>
+    <path d="M50 96 Q100 76 150 96 Q160 140 100 150 Q40 140 50 96 Z" fill="url(#bd)" stroke="#4d922f" stroke-width="3"/>
+    <path d="M70 122 Q100 140 130 122" fill="none" stroke="#3a6d22" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="74" cy="112" r="6" fill="#FF97A8" opacity=".5"/><circle cx="126" cy="112" r="6" fill="#FF97A8" opacity=".5"/></svg>`,
+  sete:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F3EEFF"/><stop offset="1" stop-color="#E1D6FF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9E8CFF"/><stop offset="1" stop-color="#7A66E6"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <text x="100" y="152" font-family="Baloo 2,Comic Sans MS,sans-serif" font-size="140" font-weight="800" fill="url(#bd)" stroke="#6b5ad1" stroke-width="2" text-anchor="middle">7</text></svg>`,
+  sino:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF7DE"/><stop offset="1" stop-color="#FFE7A6"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD65A"/><stop offset="1" stop-color="#F2A81C"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <rect x="94" y="42" width="12" height="14" rx="6" fill="#E0951A"/>
+    <path d="M100 54 C70 54 66 98 52 130 C48 140 56 148 66 148 L134 148 C144 148 152 140 148 130 C134 98 130 54 100 54 Z" fill="url(#bd)" stroke="#D98E12" stroke-width="3"/>
+    <rect x="48" y="146" width="104" height="12" rx="6" fill="#E0951A"/><circle cx="100" cy="166" r="10" fill="#C77E0C"/>
+    <ellipse cx="82" cy="92" rx="10" ry="20" fill="#fff" opacity=".35"/></svg>`,
+  sumo:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF1E4"/><stop offset="1" stop-color="#FFDDC0"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <rect x="112" y="34" width="8" height="70" rx="4" fill="#FF5D8F" transform="rotate(12 116 60)"/>
+    <path d="M64 66 L136 66 L128 156 Q126 166 116 166 L84 166 Q74 166 72 156 Z" fill="#CDEFFF" stroke="#9fd0e6" stroke-width="3"/>
+    <path d="M70 98 L130 98 L124 152 Q122 160 114 160 L86 160 Q78 160 76 152 Z" fill="#FF8A3C"/>
+    <ellipse cx="100" cy="66" rx="36" ry="8" fill="#fff" opacity=".6"/><circle cx="90" cy="122" r="6" fill="#fff" opacity=".5"/></svg>`,
+  tambor:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFEFEF"/><stop offset="1" stop-color="#FFD6D6"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8B8B"/><stop offset="1" stop-color="#E4572E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <line x1="118" y1="46" x2="140" y2="78" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/><circle cx="116" cy="44" r="8" fill="#8B5A2B"/>
+    <line x1="82" y1="46" x2="60" y2="78" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/><circle cx="84" cy="44" r="8" fill="#8B5A2B"/>
+    <rect x="48" y="82" width="104" height="52" fill="url(#bd)"/>
+    <ellipse cx="100" cy="82" rx="52" ry="16" fill="#FFF3E0" stroke="#E4572E" stroke-width="3"/>
+    <ellipse cx="100" cy="134" rx="52" ry="16" fill="#E4572E"/>
+    <g stroke="#FFD23F" stroke-width="4"><path d="M54 88 L80 128 M80 88 L54 128 M100 86 L100 130 M120 88 L146 128 M146 88 L120 128"/></g>
+    <circle cx="52" cy="108" r="5" fill="#FFD23F"/><circle cx="148" cy="108" r="5" fill="#FFD23F"/></svg>`,
+  tesoura:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F1F5F8"/><stop offset="1" stop-color="#DCE6EC"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <line x1="156" y1="54" x2="96" y2="104" stroke="#B0BAC4" stroke-width="13" stroke-linecap="round"/>
+    <line x1="156" y1="150" x2="96" y2="100" stroke="#C6D0D8" stroke-width="13" stroke-linecap="round"/>
+    <circle cx="66" cy="74" r="20" fill="none" stroke="#FF6B6B" stroke-width="10"/>
+    <circle cx="66" cy="130" r="20" fill="none" stroke="#4FC3F7" stroke-width="10"/>
+    <circle cx="100" cy="102" r="6" fill="#8B95A0"/></svg>`,
+  tigre:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF3E0"/><stop offset="1" stop-color="#FFE0B0"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB24D"/><stop offset="1" stop-color="#F5851E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="56,72 68,32 96,60" fill="url(#bd)"/><polygon points="144,72 132,32 104,60" fill="url(#bd)"/>
+    <circle cx="100" cy="106" r="52" fill="url(#bd)" stroke="#d97316" stroke-width="3"/>
+    <ellipse cx="100" cy="120" rx="30" ry="22" fill="#FFF3E0"/>
+    <g stroke="#3a2f2a" stroke-width="5" stroke-linecap="round"><line x1="100" y1="58" x2="100" y2="74"/><line x1="72" y1="66" x2="78" y2="82"/><line x1="128" y1="66" x2="122" y2="82"/><line x1="58" y1="96" x2="74" y2="100"/><line x1="142" y1="96" x2="126" y2="100"/></g>
+    <circle cx="84" cy="102" r="6" fill="#2a2a2a"/><circle cx="116" cy="102" r="6" fill="#2a2a2a"/>
+    <polygon points="94,116 106,116 100,124" fill="#FF6F8E"/>
+    <path d="M100 124 Q100 132 108 134 M100 124 Q100 132 92 134" fill="none" stroke="#4b5560" stroke-width="3" stroke-linecap="round"/></svg>`,
+  tomate:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFEFEF"/><stop offset="1" stop-color="#FFD6D6"/></radialGradient>
+    <radialGradient id="bd" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#FF6B6B"/><stop offset="1" stop-color="#D62839"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="100" cy="110" r="56" fill="url(#bd)" stroke="#b52836" stroke-width="3"/>
+    <path d="M100 72 L82 54 M100 72 L118 54 M100 72 L100 48 M100 72 L72 64 M100 72 L128 64" stroke="#3a8a3d" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="100" cy="66" r="7" fill="#4CAF50"/>
+    <ellipse cx="78" cy="98" rx="12" ry="16" fill="#fff" opacity=".32"/></svg>`,
+  tubarao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#E6FAFF"/><stop offset="1" stop-color="#C6EEFB"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FB4C2"/><stop offset="1" stop-color="#6E8695"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="150,104 190,80 188,128" fill="#6E8695"/><polygon points="96,44 118,86 82,86" fill="#6E8695"/>
+    <ellipse cx="92" cy="104" rx="70" ry="42" fill="url(#bd)" stroke="#5a7180" stroke-width="3"/>
+    <path d="M22 104 q20 -4 46 0 q-26 8 -46 0 Z" fill="#5a7180"/>
+    <path d="M30 110 L60 116 M42 118 L64 122" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="70" cy="96" r="7" fill="#fff"/><circle cx="68" cy="96" r="3.5" fill="#111"/></svg>`,
+  bebe:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EAF6FF"/><stop offset="1" stop-color="#D3EAFF"/></radialGradient>
+    <radialGradient id="sk" cx="42%" cy="38%" r="70%"><stop offset="0" stop-color="#FFE3C6"/><stop offset="1" stop-color="#F6C79B"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="100" cy="104" r="56" fill="url(#sk)" stroke="#e6b184" stroke-width="2"/>
+    <path d="M84 52 q16 -12 32 0" fill="none" stroke="#C58A54" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="84" cy="100" r="7" fill="#3a2a17"/><circle cx="116" cy="100" r="7" fill="#3a2a17"/><circle cx="86" cy="98" r="2" fill="#fff"/><circle cx="118" cy="98" r="2" fill="#fff"/>
+    <path d="M88 122 Q100 132 112 122" fill="none" stroke="#c96a6a" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="72" cy="116" r="8" fill="#FF97A8" opacity=".55"/><circle cx="128" cy="116" r="8" fill="#FF97A8" opacity=".55"/>
+    <ellipse cx="100" cy="140" rx="14" ry="10" fill="#FFB7C9" stroke="#e58aa0" stroke-width="2"/></svg>`,
+  bicicleta:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EAFBF3"/><stop offset="1" stop-color="#CDEFDF"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="54" cy="128" r="30" fill="none" stroke="#37474F" stroke-width="7"/><circle cx="146" cy="128" r="30" fill="none" stroke="#37474F" stroke-width="7"/>
+    <circle cx="54" cy="128" r="5" fill="#37474F"/><circle cx="146" cy="128" r="5" fill="#37474F"/>
+    <g stroke="#FF6B6B" stroke-width="7" fill="none" stroke-linecap="round"><path d="M54 128 L124 128"/><path d="M96 128 L84 84 L124 128"/><path d="M84 84 L72 84"/><path d="M124 128 L134 82"/></g>
+    <rect x="126" y="76" width="22" height="8" rx="4" fill="#37474F"/></svg>`,
+  burro:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F5F1E6"/><stop offset="1" stop-color="#E4DCC6"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9BEA6"/><stop offset="1" stop-color="#A99B7E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <ellipse cx="62" cy="58" rx="14" ry="34" fill="url(#bd)" stroke="#8f8265" stroke-width="3" transform="rotate(-18 62 58)"/>
+    <ellipse cx="138" cy="58" rx="14" ry="34" fill="url(#bd)" stroke="#8f8265" stroke-width="3" transform="rotate(18 138 58)"/>
+    <circle cx="100" cy="108" r="50" fill="url(#bd)" stroke="#8f8265" stroke-width="3"/>
+    <ellipse cx="100" cy="128" rx="30" ry="26" fill="#D9D0BC"/>
+    <circle cx="84" cy="100" r="6.5" fill="#3a3226"/><circle cx="116" cy="100" r="6.5" fill="#3a3226"/>
+    <ellipse cx="88" cy="130" rx="5" ry="7" fill="#3a3226"/><ellipse cx="112" cy="130" rx="5" ry="7" fill="#3a3226"/></svg>`,
+
   /* ---- Ícones do menu ---- */
   icoSyl:`<svg viewBox="0 0 200 200"><defs>
     <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#28d3c4"/><stop offset="1" stop-color="#00BFB2"/></linearGradient></defs>
@@ -623,6 +820,7 @@ function showScreen(id){
   stopSpeech();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  if(id==='g-syl') setTimeout(randomCon, 350);   /* refere a letra logo na entrada */
   if(id==='g-let') newLetterRound();
   if(id==='g-eng') newEnglishRound();
 }
@@ -652,19 +850,20 @@ function celebrate(){
 /* =========================================================
    JOGO 1 — MÁQUINA DE SÍLABAS (com descoberta de palavras)
    ========================================================= */
-const CONS = ['B','D','F','G','L','M','N','P','R','S','T','V'];
-/* sílaba (consoante+vogal) -> palavra real + ilustração */
+/* Consoantes com cobertura total das 5 vogais -> qualquer sílaba dá palavra+desenho */
+const CONS = ['B','L','M','R','S','T'];
 const SYL_WORDS = {
-  BA:{w:'BALÃO',k:'balao'}, BO:{w:'BOLA',k:'bola'}, GA:{w:'GATO',k:'gato'},
-  PA:{w:'PATO',k:'pato'}, PE:{w:'PEIXE',k:'peixe'}, CA:{w:'CASA',k:'casa'},
-  CO:{w:'CORAÇÃO',k:'coracao'}, MA:{w:'MAÇÃ',k:'maca'}, LU:{w:'LUA',k:'lua'},
-  LE:{w:'LEÃO',k:'leao'}, SO:{w:'SOL',k:'sol'}, RA:{w:'RATO',k:'rato'},
-  VA:{w:'VACA',k:'vaca'}, NU:{w:'NUVEM',k:'nuvem'}
+  BA:{w:'BALÃO',k:'balao'}, BE:{w:'BEBÉ',k:'bebe'}, BI:{w:'BICICLETA',k:'bicicleta'}, BO:{w:'BOLA',k:'bola'}, BU:{w:'BURRO',k:'burro'},
+  LA:{w:'LÁPIS',k:'lapis'}, LE:{w:'LEÃO',k:'leao'}, LI:{w:'LIMÃO',k:'limao'}, LO:{w:'LOBO',k:'lobo'}, LU:{w:'LUA',k:'lua'},
+  MA:{w:'MAÇÃ',k:'maca'}, ME:{w:'MELÃO',k:'melao'}, MI:{w:'MILHO',k:'milho'}, MO:{w:'MORANGO',k:'morango'}, MU:{w:'MÚSICA',k:'musica'},
+  RA:{w:'RATO',k:'rato'}, RE:{w:'REI',k:'rei'}, RI:{w:'RIO',k:'rio'}, RO:{w:'ROBÔ',k:'robo'}, RU:{w:'RUA',k:'rua'},
+  SA:{w:'SAPO',k:'sapo'}, SE:{w:'SETE',k:'sete'}, SI:{w:'SINO',k:'sino'}, SO:{w:'SOL',k:'sol'}, SU:{w:'SUMO',k:'sumo'},
+  TA:{w:'TAMBOR',k:'tambor'}, TE:{w:'TESOURA',k:'tesoura'}, TI:{w:'TIGRE',k:'tigre'}, TO:{w:'TOMATE',k:'tomate'}, TU:{w:'TUBARÃO',k:'tubarao'}
 };
-/* ilustração decorativa por consoante (quando não há palavra) */
-const CON_ART = {B:'bola',F:'flor',G:'gato',L:'lua',M:'maca',N:'nuvem',P:'pato',R:'rato',S:'sol',V:'vaca',D:'estrela',T:'borboleta'};
-let activeCon='V';
+let activeCon='B';
 function phonetic(t){ return t.replace(/A/g,'Á').replace(/E/g,'É').replace(/O/g,'Ó'); }
+/* fala a sílaba em minúsculas (evita que o TTS soletre "érre á" em vez de "rá") */
+function saySyllable(syl){ return phonetic(syl).toLowerCase(); }
 function randomCon(){ stopSpeech(); activeCon=CONS[(Math.random()*CONS.length)|0]; document.getElementById('syl-con').innerText=activeCon; speak(sayLetter(activeCon)); }
 document.getElementById('syl-random').addEventListener('click', randomCon);
 
@@ -694,17 +893,12 @@ function dropVowel(v){
   const drop=document.getElementById('syl-drop'), res=document.getElementById('syl-result');
   const syl=activeCon+v, word=SYL_WORDS[syl];
   drop.innerText=v;
-  if(word){
-    document.getElementById('syl-ri').innerHTML=art(word.k);
-    document.getElementById('syl-rt').innerText=word.w;
-    speakSeq([{t:phonetic(syl)},{t:word.w,r:0.8}]);
-  } else {
-    document.getElementById('syl-ri').innerHTML=art(CON_ART[activeCon]||'estrela');
-    document.getElementById('syl-rt').innerText=syl;
-    speak(activeCon+phonetic(v));
-  }
+  /* toda a sílaba tem palavra + desenho: mostra a sílaba, depois a palavra */
+  document.getElementById('syl-ri').innerHTML=art(word.k);
+  document.getElementById('syl-rt').innerText=word.w;
   res.classList.add('show');
-  setTimeout(()=>{ res.classList.remove('show'); drop.innerText='?'; }, word?2600:2200);
+  speakSeq([{t:saySyllable(syl),r:0.68},{t:word.w.toLowerCase(),r:0.82}]);
+  setTimeout(()=>{ res.classList.remove('show'); drop.innerText='?'; }, 2900);
 }
 
 /* =========================================================
