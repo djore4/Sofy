@@ -6,157 +6,177 @@
     <title>Aprender a Brincar</title>
     <style>
         :root{
-            --coral:#FF6B6B; --teal:#00C2B8; --sun:#FFD23F; --purple:#8E7CFF;
-            --sky1:#BEE7FF; --sky2:#EAF7FF; --ink:#2b3a4a; --good:#4CC36B;
+            --coral:#FF6B6B; --teal:#00BFB2; --sun:#FFC93C; --purple:#8E7CFF; --pink:#FF7AA8;
+            --ink:#2c3e50; --muted:#6b7a8d; --good:#37c26b;
+            --card:#ffffff; --shadow:0 18px 40px rgba(30,50,90,.14);
         }
         *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-        html,body{height:100%;}
+        html,body{height:100%; margin:0;}
         body{
-            margin:0; font-family:'Comic Sans MS','Baloo 2','Segoe UI',sans-serif;
-            color:var(--ink); overflow:hidden; touch-action:manipulation;
-            background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 100%);
-            text-align:center; user-select:none;
+            font-family:'Baloo 2','Comic Sans MS','Segoe UI Rounded','Segoe UI',sans-serif;
+            color:var(--ink); overflow:hidden; touch-action:manipulation; user-select:none;
+            text-align:center; position:relative;
+            background:linear-gradient(180deg,#CFeeff 0%,#E9f6ff 45%,#F3fbff 100%);
         }
+        /* fundo decorativo suave */
+        .bg-blob{position:fixed; border-radius:50%; filter:blur(8px); opacity:.5; z-index:0; pointer-events:none;}
+        .b1{width:320px;height:320px;left:-90px;top:-70px;background:radial-gradient(circle at 30% 30%,#BDEBFF,#8ED6F0 70%,transparent);}
+        .b2{width:280px;height:280px;right:-80px;top:60px;background:radial-gradient(circle at 40% 40%,#FFE1EC,#FFB7D0 70%,transparent);}
+        .b3{width:360px;height:360px;left:-100px;bottom:-140px;background:radial-gradient(circle at 40% 40%,#E4F7D6,#BFE9A6 70%,transparent);}
 
-        /* ---------- Ecrãs ---------- */
         .screen{position:fixed; inset:0; display:none; flex-direction:column;
-            align-items:center; justify-content:center; padding:16px;}
-        .screen.active{display:flex; animation:fadeIn .35s ease;}
+            align-items:center; justify-content:center; padding:20px; z-index:1;}
+        .screen.active{display:flex; animation:fadeIn .4s ease;}
         @keyframes fadeIn{from{opacity:0; transform:scale(.98);} to{opacity:1; transform:scale(1);}}
 
         /* ---------- Arranque ---------- */
-        #start .cloud{font-size:1.1rem; color:#5a6b7a;}
-        #start h1{font-size:2.4rem; margin:8px 0 4px; color:var(--ink); text-shadow:0 2px 0 #fff;}
+        #start .hello{font-size:3.6rem; animation:bob 2s ease-in-out infinite;}
+        #start h1{font-size:2.7rem; margin:14px 0 2px; letter-spacing:.5px;
+            background:linear-gradient(90deg,var(--coral),var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+        #start .tag{color:var(--muted); font-size:1.15rem; margin-bottom:30px;}
         #start-btn{
-            margin-top:26px; padding:26px 54px; font-size:2rem; font-weight:bold;
-            color:#fff; background:var(--coral); border:none; border-radius:40px; cursor:pointer;
-            box-shadow:0 8px 0 #d94f4f, 0 14px 24px rgba(217,79,79,.35);
-            animation:bob 1.6s ease-in-out infinite;
+            padding:24px 56px; font-size:1.9rem; font-weight:700; color:#fff; cursor:pointer;
+            background:linear-gradient(180deg,#FF8B8B,#FF5D5D); border:none; border-radius:44px;
+            box-shadow:0 10px 0 #d94f4f, 0 20px 30px rgba(217,79,79,.35);
+            animation:bob 1.7s ease-in-out infinite;
         }
-        #start-btn:active{transform:translateY(6px); box-shadow:0 2px 0 #d94f4f;}
-        @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+        #start-btn:active{transform:translateY(7px); box-shadow:0 3px 0 #d94f4f;}
+        @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
 
         /* ---------- Menu ---------- */
-        #menu h1{font-size:2rem; margin:0 0 4px; text-shadow:0 2px 0 #fff;}
-        #menu p{margin:0 0 20px; color:#5a6b7a; font-size:1.05rem;}
-        .cards{display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:stretch; max-width:920px;}
+        #menu h1{font-size:2.2rem; margin:0 0 4px;}
+        #menu .sub{margin:0 0 26px; color:var(--muted); font-size:1.1rem;}
+        .cards{display:flex; gap:26px; flex-wrap:wrap; justify-content:center; max-width:960px;}
         .card{
-            width:250px; max-width:42vw; min-width:180px; background:#fff; border-radius:28px;
-            padding:20px 16px 22px; cursor:pointer; border:5px solid #fff;
-            box-shadow:0 10px 0 rgba(0,0,0,.10), 0 16px 30px rgba(0,0,0,.12);
-            transition:transform .15s ease; display:flex; flex-direction:column; align-items:center;
+            width:264px; max-width:44vw; min-width:190px; background:var(--card); border-radius:32px;
+            padding:22px 18px 24px; cursor:pointer; box-shadow:var(--shadow);
+            border:6px solid transparent; transition:transform .15s ease, box-shadow .15s ease;
+            display:flex; flex-direction:column; align-items:center; position:relative; overflow:hidden;
         }
-        .card:active{transform:translateY(6px) scale(.98);}
-        .card .art{width:120px; height:120px; margin-bottom:6px;}
+        .card::before{content:""; position:absolute; inset:0 0 auto 0; height:46%;
+            background:linear-gradient(180deg,rgba(255,255,255,.6),transparent);}
+        .card:active{transform:translateY(6px) scale(.985); box-shadow:0 10px 22px rgba(30,50,90,.16);}
+        .card .art{width:138px; height:138px; position:relative;}
         .card .art svg{width:100%; height:100%; display:block;}
-        .card .name{font-size:1.35rem; font-weight:bold; margin-top:6px;}
-        .card .sub{font-size:.9rem; color:#7a8794;}
-        .card.c1{border-color:var(--teal);}   .card.c1 .name{color:var(--teal);}
-        .card.c2{border-color:var(--coral);}  .card.c2 .name{color:var(--coral);}
-        .card.c3{border-color:var(--purple);} .card.c3 .name{color:var(--purple);}
+        .card .name{font-size:1.5rem; font-weight:700; margin-top:12px;}
+        .card .desc{font-size:.98rem; color:var(--muted);}
+        .card.c1{border-color:var(--teal);}   .card.c1 .name{color:#028f86;}
+        .card.c2{border-color:var(--coral);}  .card.c2 .name{color:#e0554f;}
+        .card.c3{border-color:var(--purple);} .card.c3 .name{color:#6b5ad1;}
 
         /* ---------- Botões flutuantes ---------- */
         .home-btn,.ear-btn{
-            position:fixed; top:14px; z-index:50; width:62px; height:62px; border:none;
-            border-radius:50%; font-size:1.7rem; cursor:pointer; color:#fff;
-            display:flex; align-items:center; justify-content:center;
-            box-shadow:0 5px 0 rgba(0,0,0,.18);
+            position:fixed; top:16px; z-index:60; width:68px; height:68px; border:none; border-radius:50%;
+            font-size:1.9rem; cursor:pointer; color:#fff; display:flex; align-items:center; justify-content:center;
+            box-shadow:0 7px 0 rgba(0,0,0,.16), 0 10px 20px rgba(0,0,0,.14);
         }
-        .home-btn{left:14px; background:var(--coral);}
-        .ear-btn{right:14px; background:var(--teal);}
-        .home-btn:active,.ear-btn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.18);}
+        .home-btn{left:16px; background:linear-gradient(180deg,#FF8B8B,#FF5D5D);}
+        .ear-btn{right:16px; background:linear-gradient(180deg,#28d3c4,#00BFB2);}
+        .home-btn:active,.ear-btn:active{transform:translateY(5px); box-shadow:0 2px 0 rgba(0,0,0,.16);}
+        /* Tablet: botões bem maiores */
+        @media (min-width:700px){
+            .home-btn,.ear-btn{width:108px; height:108px; font-size:3.2rem; top:26px;}
+            .home-btn{left:26px;} .ear-btn{right:26px;}
+        }
 
-        .game-title{position:fixed; top:22px; left:50%; transform:translateX(-50%);
-            font-size:1.3rem; font-weight:bold; color:var(--ink); text-shadow:0 2px 0 #fff; z-index:40;}
+        .game-title{position:fixed; top:26px; left:50%; transform:translateX(-50%);
+            font-size:1.5rem; font-weight:700; color:var(--ink); z-index:40; text-shadow:0 2px 0 rgba(255,255,255,.7);}
+        @media (min-width:700px){ .game-title{font-size:2rem; top:40px;} }
 
         /* ---------- Jogo Sílabas ---------- */
-        #g-syl .stage{display:flex; flex-direction:column; align-items:center; gap:18px; width:100%; max-width:460px;}
-        #syl-random{padding:14px 26px; font-size:1.15rem; font-weight:bold; color:#fff;
-            background:var(--purple); border:none; border-radius:18px; box-shadow:0 5px 0 #6b5ad1;}
-        #syl-random:active{transform:translateY(4px); box-shadow:0 1px 0 #6b5ad1;}
-        .machine{position:relative; width:92%; max-width:400px; height:210px; background:#37474F;
-            border-radius:32px; border:10px solid #263238; display:flex; align-items:center;
-            justify-content:center; box-shadow:inset 0 0 24px #000, 0 10px 24px rgba(0,0,0,.25);}
-        .machine::before,.machine::after{content:""; position:absolute; top:-24px; width:16px; height:16px;
-            border-radius:50%; background:#263238;}
-        .machine::before{left:60px; box-shadow:0 -10px 0 -2px #263238;}
-        .machine::after{right:60px; box-shadow:0 -10px 0 -2px #263238;}
-        .consonant{font-size:6.5rem; font-weight:900; color:var(--teal); margin-right:12px;
-            text-shadow:0 0 22px rgba(0,194,184,.8);}
-        .drop{width:120px; height:150px; border:5px dashed rgba(255,255,255,.25); border-radius:22px;
-            display:flex; align-items:center; justify-content:center; font-size:6.5rem; font-weight:900; color:var(--coral);}
-        .drop.hot{border-color:var(--sun); background:rgba(255,210,63,.15);}
-        .vowels{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; width:100%;}
-        .vowel{width:72px; height:72px; background:var(--coral); border-radius:18px; display:flex;
-            align-items:center; justify-content:center; font-size:2.6rem; font-weight:bold; color:#fff;
-            box-shadow:0 5px 0 #d94f4f; cursor:grab;}
-        #syl-result{position:fixed; top:26%; left:50%; transform:translate(-50%,-50%) scale(0);
-            transition:.45s cubic-bezier(.2,1.4,.4,1); z-index:60; pointer-events:none; background:#fff;
-            padding:16px 22px; border-radius:26px; box-shadow:0 12px 30px rgba(0,0,0,.25);}
+        .stage{display:flex; flex-direction:column; align-items:center; gap:20px; width:100%; max-width:480px;}
+        #syl-random{padding:15px 30px; font-size:1.2rem; font-weight:700; color:#fff;
+            background:linear-gradient(180deg,#9E8CFF,#8E7CFF); border:none; border-radius:20px; box-shadow:0 6px 0 #6b5ad1; cursor:pointer;}
+        #syl-random:active{transform:translateY(5px); box-shadow:0 1px 0 #6b5ad1;}
+        .machine{position:relative; width:94%; max-width:420px; height:220px;
+            background:linear-gradient(180deg,#455A64,#37474F); border-radius:34px; border:10px solid #263238;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:inset 0 4px 18px rgba(0,0,0,.55), 0 14px 28px rgba(0,0,0,.25);}
+        .machine::before,.machine::after{content:""; position:absolute; top:-26px; width:16px; height:26px; background:#263238; border-radius:8px;}
+        .machine::before{left:64px;} .machine::after{right:64px;}
+        .bulb{position:absolute; top:-40px; width:18px; height:18px; border-radius:50%; background:#FFD23F; box-shadow:0 0 14px #FFD23F;}
+        .bulb.l{left:63px;} .bulb.r{right:63px;}
+        .consonant{font-size:7rem; font-weight:900; color:#4be3d6; margin-right:14px; text-shadow:0 0 26px rgba(75,227,214,.85);}
+        .drop{width:128px; height:158px; border:5px dashed rgba(255,255,255,.28); border-radius:24px;
+            display:flex; align-items:center; justify-content:center; font-size:7rem; font-weight:900; color:#FF7A7A;}
+        .drop.hot{border-color:var(--sun); background:rgba(255,201,60,.16); transform:scale(1.04);}
+        .vowels{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; width:100%;}
+        .vowel{width:76px; height:76px; border-radius:20px; color:#fff; display:flex; align-items:center; justify-content:center;
+            font-size:2.7rem; font-weight:800; cursor:grab; background:linear-gradient(180deg,#FF8B8B,#FF5D5D); box-shadow:0 6px 0 #d94f4f;}
+        #syl-result{position:fixed; top:24%; left:50%; transform:translate(-50%,-50%) scale(0);
+            transition:.45s cubic-bezier(.2,1.5,.4,1); z-index:70; pointer-events:none; background:#fff;
+            padding:18px 26px 22px; border-radius:30px; box-shadow:0 20px 44px rgba(0,0,0,.28);}
         #syl-result.show{transform:translate(-50%,-50%) scale(1);}
-        #syl-result .ri{width:110px; height:110px; margin:0 auto;}
+        #syl-result .ri{width:132px; height:132px; margin:0 auto;}
         #syl-result .ri svg{width:100%; height:100%;}
-        #syl-result .ri .emoji{font-size:5rem; line-height:110px;}
-        #syl-result .rt{font-size:2.4rem; font-weight:bold; color:var(--purple);}
+        #syl-result .rt{font-size:2.5rem; font-weight:800; color:#6b5ad1; margin-top:4px;}
 
-        /* ---------- Jogos de escolha (Letras / Inglês) ---------- */
-        .quiz{display:flex; flex-direction:column; align-items:center; gap:14px; width:100%; max-width:640px;}
-        .quiz .prompt{font-size:1.15rem; color:#5a6b7a; min-height:1.4em;}
-        .bigart{width:200px; height:200px; background:#fff; border-radius:30px; padding:12px;
-            box-shadow:0 10px 0 rgba(0,0,0,.08), 0 16px 30px rgba(0,0,0,.12);}
+        /* ---------- Jogos de escolha ---------- */
+        .quiz{display:flex; flex-direction:column; align-items:center; gap:20px; width:100%; max-width:680px;}
+        .prompt{font-size:1.2rem; color:var(--muted); min-height:1.4em; font-weight:600;}
+        @media (min-width:700px){ .prompt{font-size:1.5rem;} }
+        .round{display:flex; flex-direction:column; align-items:center; gap:22px;
+            opacity:0; transform:translateY(14px); transition:opacity .45s ease, transform .45s ease;}
+        .round.in{opacity:1; transform:none;}
+        .bigart{width:216px; height:216px; background:#fff; border-radius:36px; padding:12px; box-shadow:var(--shadow);}
+        @media (min-width:700px){ .bigart{width:264px; height:264px;} }
         .bigart svg{width:100%; height:100%;}
-        .options{display:flex; gap:16px; flex-wrap:wrap; justify-content:center;}
-        .opt-letter{width:96px; height:96px; border-radius:22px; background:var(--coral); color:#fff;
-            font-size:3.4rem; font-weight:900; display:flex; align-items:center; justify-content:center;
-            box-shadow:0 6px 0 #d94f4f; cursor:pointer;}
-        .opt-letter:nth-child(2){background:var(--teal); box-shadow:0 6px 0 #008f88;}
-        .opt-letter:nth-child(3){background:var(--purple); box-shadow:0 6px 0 #6b5ad1;}
-        .opt-img{width:130px; height:130px; background:#fff; border-radius:24px; padding:8px; cursor:pointer;
-            box-shadow:0 6px 0 rgba(0,0,0,.10); border:4px solid #fff;}
+        .options{display:flex; gap:18px; flex-wrap:wrap; justify-content:center;}
+        .opt-letter{width:100px; height:100px; border-radius:26px; color:#fff; font-size:3.6rem; font-weight:900;
+            display:flex; align-items:center; justify-content:center; cursor:pointer;
+            background:linear-gradient(180deg,#FF8B8B,#FF5D5D); box-shadow:0 7px 0 #d94f4f;}
+        .opt-letter:nth-child(2){background:linear-gradient(180deg,#2ad5c6,#00BFB2); box-shadow:0 7px 0 #028f86;}
+        .opt-letter:nth-child(3){background:linear-gradient(180deg,#9E8CFF,#8E7CFF); box-shadow:0 7px 0 #6b5ad1;}
+        @media (min-width:700px){ .opt-letter{width:128px; height:128px; font-size:4.6rem;} }
+        .opt-img{width:140px; height:140px; background:#fff; border-radius:28px; padding:10px; cursor:pointer;
+            box-shadow:var(--shadow); border:5px solid #fff;}
+        @media (min-width:700px){ .opt-img{width:180px; height:180px;} }
         .opt-img svg{width:100%; height:100%;}
         .opt-letter:active,.opt-img:active{transform:translateY(4px);}
-        .shake{animation:shake .4s;}
-        @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
-        .pick-right{animation:pop .5s;}
-        @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.18);}100%{transform:scale(1);}}
+        .shake{animation:shake .45s;}
+        @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-9px);}75%{transform:translateX(9px);}}
+        .pick-right{animation:pop .55s; outline:5px solid var(--good); outline-offset:3px;}
+        @keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.18);}100%{transform:scale(1);}}
+        .dim{opacity:.4;}
 
         /* ---------- Celebração ---------- */
-        #cheer{position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center;
-            pointer-events:none;}
+        #cheer{position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center; pointer-events:none;}
         #cheer.show{display:flex;}
-        #cheer .stars{font-size:5rem; animation:pop .6s;}
-        .confetti{position:fixed; top:-20px; width:12px; height:12px; z-index:79; border-radius:3px; pointer-events:none;}
-        @keyframes fall{to{transform:translateY(110vh) rotate(540deg); opacity:0;}}
+        #cheer .stars{font-size:5.5rem; animation:pop .6s;}
+        .confetti{position:fixed; top:-24px; width:13px; height:13px; z-index:79; border-radius:3px; pointer-events:none;}
+        @keyframes fall{to{transform:translateY(112vh) rotate(560deg); opacity:0;}}
     </style>
 </head>
 <body>
+<div class="bg-blob b1"></div><div class="bg-blob b2"></div><div class="bg-blob b3"></div>
 
 <!-- ============ ARRANQUE ============ -->
 <section id="start" class="screen active">
-    <div class="cloud">☁️ 🌈 ☁️</div>
+    <div class="hello">🐻🎈</div>
     <h1>Aprender a Brincar</h1>
+    <div class="tag">Jogos para descobrir letras, palavras e inglês</div>
     <button id="start-btn">Toca para começar 👆</button>
 </section>
 
 <!-- ============ MENU ============ -->
 <section id="menu" class="screen">
     <h1>Escolhe um jogo 🎈</h1>
-    <p>Toca numa imagem</p>
+    <div class="sub">Toca numa imagem</div>
     <div class="cards">
         <div class="card c1" data-go="g-syl" data-say="Máquina de sílabas">
             <div class="art" data-art="icoSyl"></div>
             <div class="name">Sílabas</div>
-            <div class="sub">Junta letras e ouve</div>
+            <div class="desc">Junta letras e ouve</div>
         </div>
         <div class="card c2" data-go="g-let" data-say="Primeiras letras">
             <div class="art" data-art="icoLet"></div>
             <div class="name">Primeiras Letras</div>
-            <div class="sub">Que letra começa?</div>
+            <div class="desc">Com que letra começa?</div>
         </div>
         <div class="card c3" data-go="g-eng" data-say="Inglês">
             <div class="art" data-art="icoEng"></div>
             <div class="name">Inglês</div>
-            <div class="sub">Aprende palavras novas</div>
+            <div class="desc">Aprende palavras novas</div>
         </div>
     </div>
 </section>
@@ -169,15 +189,13 @@
     <div class="stage">
         <button id="syl-random">Trocar letra 🎲</button>
         <div class="machine">
+            <span class="bulb l"></span><span class="bulb r"></span>
             <div class="consonant" id="syl-con">V</div>
             <div class="drop" id="syl-drop">?</div>
         </div>
         <div class="vowels">
-            <div class="vowel" data-v="A">A</div>
-            <div class="vowel" data-v="E">E</div>
-            <div class="vowel" data-v="I">I</div>
-            <div class="vowel" data-v="O">O</div>
-            <div class="vowel" data-v="U">U</div>
+            <div class="vowel" data-v="A">A</div><div class="vowel" data-v="E">E</div>
+            <div class="vowel" data-v="I">I</div><div class="vowel" data-v="O">O</div><div class="vowel" data-v="U">U</div>
         </div>
     </div>
 </section>
@@ -189,8 +207,10 @@
     <div class="game-title">Primeiras Letras</div>
     <div class="quiz">
         <div class="prompt" id="let-prompt">Com que letra começa?</div>
-        <div class="bigart" id="let-art"></div>
-        <div class="options" id="let-opts"></div>
+        <div class="round" id="let-round">
+            <div class="bigart" id="let-art"></div>
+            <div class="options" id="let-opts"></div>
+        </div>
     </div>
 </section>
 
@@ -201,150 +221,339 @@
     <div class="game-title">Inglês</div>
     <div class="quiz">
         <div class="prompt" id="eng-prompt">Ouve e escolhe a imagem certa</div>
-        <div class="options" id="eng-opts"></div>
+        <div class="round" id="eng-round">
+            <div class="options" id="eng-opts"></div>
+        </div>
     </div>
 </section>
 
-<!-- ============ CELEBRAÇÃO ============ -->
 <div id="cheer"><div class="stars">⭐⭐⭐</div></div>
 
 <script>
 /* =========================================================
-   ILUSTRAÇÕES SVG (desenhadas à mão em código)
+   ILUSTRAÇÕES SVG (gradientes, sombras, brilhos, caras)
+   ids reutilizados; art() torna-os únicos em cada render
    ========================================================= */
+const F = { /* fragmentos reutilizáveis */
+  blush:'<circle cx="74" cy="112" r="8" fill="#FF97A8" opacity=".55"/><circle cx="126" cy="112" r="8" fill="#FF97A8" opacity=".55"/>',
+  eyes:'<circle cx="86" cy="100" r="7" fill="#3a2f2a"/><circle cx="114" cy="100" r="7" fill="#3a2f2a"/><circle cx="88" cy="98" r="2.2" fill="#fff"/><circle cx="116" cy="98" r="2.2" fill="#fff"/>',
+  smile:'<path d="M85 116 Q100 132 115 116" fill="none" stroke="#3a2f2a" stroke-width="5.5" stroke-linecap="round"/>'
+};
 const ART = {
-  sol:`<svg viewBox="0 0 200 200"><g stroke="#F4A100" stroke-width="8" stroke-linecap="round">
-    <line x1="100" y1="18" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="182"/>
-    <line x1="18" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="182" y2="100"/>
-    <line x1="41" y1="41" x2="57" y2="57"/><line x1="143" y1="143" x2="159" y2="159"/>
-    <line x1="41" y1="159" x2="57" y2="143"/><line x1="143" y1="57" x2="159" y2="41"/></g>
-    <circle cx="100" cy="100" r="52" fill="#FFD23F" stroke="#F4A100" stroke-width="5"/>
-    <circle cx="83" cy="92" r="6" fill="#5a3e00"/><circle cx="117" cy="92" r="6" fill="#5a3e00"/>
-    <path d="M80 115 Q100 132 120 115" fill="none" stroke="#5a3e00" stroke-width="5" stroke-linecap="round"/></svg>`,
+  sol:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="44%" r="62%"><stop offset="0" stop-color="#FFF7DB"/><stop offset="1" stop-color="#FFE6A6"/></radialGradient>
+    <radialGradient id="bd" cx="42%" cy="36%" r="68%"><stop offset="0" stop-color="#FFE889"/><stop offset="1" stop-color="#FFB62E"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <g stroke="#FFB62E" stroke-width="9" stroke-linecap="round">
+    <line x1="156" y1="102" x2="184" y2="102"/><line x1="148" y1="130" x2="172" y2="144"/><line x1="128" y1="150" x2="142" y2="174"/>
+    <line x1="100" y1="158" x2="100" y2="186"/><line x1="72" y1="150" x2="58" y2="174"/><line x1="51" y1="130" x2="27" y2="144"/>
+    <line x1="44" y1="102" x2="16" y2="102"/><line x1="51" y1="74" x2="27" y2="60"/><line x1="72" y1="53" x2="58" y2="29"/>
+    <line x1="100" y1="46" x2="100" y2="18"/><line x1="128" y1="53" x2="142" y2="29"/><line x1="148" y1="74" x2="172" y2="60"/></g>
+    <circle cx="100" cy="102" r="52" fill="url(#bd)" stroke="#F59E0B" stroke-width="3"/>
+    <ellipse cx="82" cy="84" rx="15" ry="10" fill="#fff" opacity=".45"/>${F.eyes}${F.smile}${F.blush}</svg>`,
 
-  lua:`<svg viewBox="0 0 200 200">
-    <path d="M120 30 A72 72 0 1 0 120 170 A54 54 0 1 1 120 30 Z" fill="#F9DC6B" stroke="#E0B84A" stroke-width="5"/>
-    <circle cx="92" cy="88" r="6" fill="#7a5a00"/>
-    <path d="M78 108 Q92 122 106 108" fill="none" stroke="#7a5a00" stroke-width="5" stroke-linecap="round"/></svg>`,
+  lua:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EEF1FF"/><stop offset="1" stop-color="#D6DEFF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3B0"/><stop offset="1" stop-color="#FFD95A"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="150" cy="58" r="4" fill="#fff"/><circle cx="156" cy="138" r="3" fill="#fff"/><circle cx="140" cy="150" r="2.5" fill="#fff"/>
+    <path d="M128 32 A74 74 0 1 0 128 168 A58 58 0 1 1 128 32 Z" fill="url(#bd)" stroke="#F1C33C" stroke-width="4"/>
+    <circle cx="92" cy="90" r="6.5" fill="#7a5a00"/><circle cx="94" cy="88" r="2" fill="#fff"/>
+    <path d="M80 108 Q92 122 104 108" fill="none" stroke="#7a5a00" stroke-width="5.5" stroke-linecap="round"/>
+    <circle cx="78" cy="102" r="7" fill="#FFB0A0" opacity=".5"/></svg>`,
 
-  gato:`<svg viewBox="0 0 200 200">
-    <polygon points="58,72 70,28 96,60" fill="#9AA7B0"/><polygon points="142,72 130,28 104,60" fill="#9AA7B0"/>
-    <polygon points="66,64 72,42 84,58" fill="#F7B2C4"/><polygon points="134,64 128,42 116,58" fill="#F7B2C4"/>
-    <circle cx="100" cy="108" r="52" fill="#9AA7B0" stroke="#7d8b95" stroke-width="4"/>
-    <ellipse cx="82" cy="100" rx="8" ry="11" fill="#3a7d44"/><ellipse cx="118" cy="100" rx="8" ry="11" fill="#3a7d44"/>
-    <circle cx="82" cy="102" r="4" fill="#111"/><circle cx="118" cy="102" r="4" fill="#111"/>
-    <polygon points="94,120 106,120 100,128" fill="#F7607A"/>
-    <path d="M100 128 Q100 136 108 138 M100 128 Q100 136 92 138" fill="none" stroke="#5b6770" stroke-width="3" stroke-linecap="round"/>
-    <g stroke="#7d8b95" stroke-width="3" stroke-linecap="round"><line x1="60" y1="118" x2="30" y2="112"/>
-    <line x1="60" y1="126" x2="30" y2="128"/><line x1="140" y1="118" x2="170" y2="112"/><line x1="140" y1="126" x2="170" y2="128"/></g></svg>`,
+  estrela:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF8DC"/><stop offset="1" stop-color="#FFEBA8"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE164"/><stop offset="1" stop-color="#FFBE21"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="100,26 122,80 180,84 135,120 150,178 100,146 50,178 65,120 20,84 78,80" fill="url(#bd)" stroke="#F1A81C" stroke-width="4" stroke-linejoin="round"/>
+    ${F.eyes}${F.smile}<circle cx="76" cy="112" r="7" fill="#FF97A8" opacity=".5"/><circle cx="124" cy="112" r="7" fill="#FF97A8" opacity=".5"/></svg>`,
 
-  cao:`<svg viewBox="0 0 200 200">
-    <ellipse cx="52" cy="110" rx="22" ry="40" fill="#8B5A2B"/><ellipse cx="148" cy="110" rx="22" ry="40" fill="#8B5A2B"/>
-    <circle cx="100" cy="105" r="52" fill="#C58A54" stroke="#8B5A2B" stroke-width="4"/>
-    <ellipse cx="100" cy="120" rx="30" ry="24" fill="#F0D8B8"/>
-    <circle cx="82" cy="95" r="6" fill="#3a2a17"/><circle cx="118" cy="95" r="6" fill="#3a2a17"/>
-    <ellipse cx="100" cy="112" rx="12" ry="9" fill="#3a2a17"/><path d="M100 121 L100 134" stroke="#3a2a17" stroke-width="4"/>
-    <path d="M100 134 Q88 140 84 132 M100 134 Q112 140 116 132" fill="none" stroke="#3a2a17" stroke-width="4" stroke-linecap="round"/></svg>`,
+  nuvem:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EAF6FF"/><stop offset="1" stop-color="#CFEBFF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#E4F0FB"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <g fill="url(#bd)" stroke="#C4DCF0" stroke-width="3">
+    <circle cx="70" cy="118" r="28"/><circle cx="104" cy="98" r="36"/><circle cx="140" cy="118" r="26"/>
+    <rect x="56" y="116" width="98" height="34" rx="17"/></g>
+    <circle cx="92" cy="104" r="6.5" fill="#5b6b7a"/><circle cx="120" cy="104" r="6.5" fill="#5b6b7a"/>
+    <path d="M92 122 Q106 136 120 122" fill="none" stroke="#5b6b7a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="80" cy="118" r="7" fill="#FF97A8" opacity=".5"/><circle cx="132" cy="118" r="7" fill="#FF97A8" opacity=".5"/></svg>`,
 
-  pato:`<svg viewBox="0 0 200 200">
-    <ellipse cx="96" cy="130" rx="60" ry="42" fill="#FFD23F" stroke="#E6A700" stroke-width="4"/>
-    <path d="M150 120 q30 -6 34 8 q-14 14 -34 4 Z" fill="#FFE9A0"/>
-    <circle cx="60" cy="78" r="34" fill="#FFD23F" stroke="#E6A700" stroke-width="4"/>
-    <circle cx="52" cy="70" r="6" fill="#222"/>
-    <path d="M26 78 q-24 2 -24 10 q0 8 24 8 q6 -9 0 -18 Z" fill="#F5872E" stroke="#d96f18" stroke-width="3"/></svg>`,
+  flor:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF0F6"/><stop offset="1" stop-color="#FFDCEA"/></radialGradient>
+    <linearGradient id="pt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9CC4"/><stop offset="1" stop-color="#FF6FA5"/></linearGradient>
+    <radialGradient id="ct" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#FFB62E"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M100 96 L100 176" stroke="#4CAF50" stroke-width="9" stroke-linecap="round"/>
+    <path d="M100 148 q30 -4 42 -30" fill="none" stroke="#4CAF50" stroke-width="9" stroke-linecap="round"/>
+    <g fill="url(#pt)" stroke="#E85E97" stroke-width="3">
+    <ellipse cx="100" cy="52" rx="19" ry="27"/><ellipse cx="145" cy="86" rx="27" ry="19"/><ellipse cx="55" cy="86" rx="27" ry="19"/>
+    <ellipse cx="125" cy="124" rx="19" ry="25"/><ellipse cx="75" cy="124" rx="19" ry="25"/></g>
+    <circle cx="100" cy="88" r="24" fill="url(#ct)" stroke="#E89A18" stroke-width="3"/>
+    <circle cx="93" cy="84" r="3.5" fill="#7a4d00"/><circle cx="107" cy="84" r="3.5" fill="#7a4d00"/>
+    <path d="M92 94 Q100 102 108 94" fill="none" stroke="#7a4d00" stroke-width="3.5" stroke-linecap="round"/></svg>`,
 
-  bola:`<svg viewBox="0 0 200 200">
-    <circle cx="100" cy="100" r="60" fill="#fff"/>
-    <path d="M100 40 A60 60 0 0 1 152 130 L100 100 Z" fill="#FF5D5D"/>
-    <path d="M152 130 A60 60 0 0 1 48 130 L100 100 Z" fill="#FFD23F"/>
-    <path d="M48 130 A60 60 0 0 1 100 40 L100 100 Z" fill="#4FC3F7"/>
-    <circle cx="100" cy="100" r="9" fill="#fff" stroke="#bbb" stroke-width="2"/>
-    <circle cx="100" cy="100" r="60" fill="none" stroke="#cfcfcf" stroke-width="3"/></svg>`,
+  arvore:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EEFBE4"/><stop offset="1" stop-color="#D3F0C0"/></radialGradient>
+    <linearGradient id="lf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7BD16B"/><stop offset="1" stop-color="#4CAF50"/></linearGradient>
+    <linearGradient id="tk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A9713F"/><stop offset="1" stop-color="#8B5A2B"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <rect x="88" y="118" width="24" height="60" rx="8" fill="url(#tk)"/>
+    <circle cx="100" cy="78" r="44" fill="url(#lf)" stroke="#3f9a45" stroke-width="3"/>
+    <circle cx="64" cy="100" r="31" fill="url(#lf)" stroke="#3f9a45" stroke-width="3"/>
+    <circle cx="136" cy="100" r="31" fill="url(#lf)" stroke="#3f9a45" stroke-width="3"/>
+    <circle cx="100" cy="104" r="35" fill="#69c46d"/>
+    <circle cx="84" cy="72" r="6" fill="#E4572E"/><circle cx="120" cy="90" r="6" fill="#E4572E"/><circle cx="98" cy="108" r="6" fill="#E4572E"/>
+    <ellipse cx="80" cy="64" rx="10" ry="7" fill="#fff" opacity=".35"/></svg>`,
 
-  flor:`<svg viewBox="0 0 200 200">
-    <line x1="100" y1="100" x2="100" y2="182" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"/>
-    <path d="M100 150 q28 -6 40 -28" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"/>
-    <g fill="#FF6FA5" stroke="#e0508a" stroke-width="3">
-    <ellipse cx="100" cy="58" rx="18" ry="26"/><ellipse cx="142" cy="90" rx="26" ry="18"/>
-    <ellipse cx="58" cy="90" rx="26" ry="18"/><ellipse cx="122" cy="126" rx="18" ry="24"/><ellipse cx="78" cy="126" rx="18" ry="24"/></g>
-    <circle cx="100" cy="92" r="22" fill="#FFD23F" stroke="#E6A700" stroke-width="3"/></svg>`,
+  gato:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F1F3FF"/><stop offset="1" stop-color="#DFE3F5"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#AEB8C4"/><stop offset="1" stop-color="#8F9BA9"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="56,74 68,30 96,60" fill="url(#bd)"/><polygon points="144,74 132,30 104,60" fill="url(#bd)"/>
+    <polygon points="65,64 71,44 84,58" fill="#FFB7C9"/><polygon points="135,64 129,44 116,58" fill="#FFB7C9"/>
+    <circle cx="100" cy="106" r="52" fill="url(#bd)" stroke="#7d8b95" stroke-width="3"/>
+    <ellipse cx="86" cy="100" rx="8" ry="11" fill="#3a7d44"/><ellipse cx="114" cy="100" rx="8" ry="11" fill="#3a7d44"/>
+    <circle cx="86" cy="102" r="4" fill="#111"/><circle cx="114" cy="102" r="4" fill="#111"/>
+    <polygon points="94,118 106,118 100,126" fill="#FF6F8E"/>
+    <path d="M100 126 Q100 134 108 137 M100 126 Q100 134 92 137" fill="none" stroke="#4b5560" stroke-width="3" stroke-linecap="round"/>
+    <g stroke="#7d8b95" stroke-width="3" stroke-linecap="round"><line x1="58" y1="116" x2="26" y2="110"/><line x1="58" y1="124" x2="26" y2="126"/><line x1="142" y1="116" x2="174" y2="110"/><line x1="142" y1="124" x2="174" y2="126"/></g>
+    <circle cx="72" cy="118" r="7" fill="#FF97A8" opacity=".45"/><circle cx="128" cy="118" r="7" fill="#FF97A8" opacity=".45"/></svg>`,
 
-  casa:`<svg viewBox="0 0 200 200">
-    <rect x="46" y="92" width="108" height="80" rx="6" fill="#FFCF7A" stroke="#d99a3a" stroke-width="4"/>
-    <polygon points="100,34 168,96 32,96" fill="#E4572E" stroke="#b23c1c" stroke-width="4"/>
-    <rect x="86" y="120" width="30" height="52" rx="4" fill="#8B5A2B"/><circle cx="110" cy="146" r="3" fill="#FFD23F"/>
-    <rect x="58" y="112" width="24" height="24" rx="3" fill="#8ED6F0" stroke="#3aa9d4" stroke-width="3"/>
-    <rect x="120" y="112" width="24" height="24" rx="3" fill="#8ED6F0" stroke="#3aa9d4" stroke-width="3"/></svg>`,
+  cao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF3E4"/><stop offset="1" stop-color="#FBE1C4"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D69A63"/><stop offset="1" stop-color="#B87A3E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <ellipse cx="50" cy="108" rx="22" ry="42" fill="#8B5A2B"/><ellipse cx="150" cy="108" rx="22" ry="42" fill="#8B5A2B"/>
+    <circle cx="100" cy="104" r="52" fill="url(#bd)" stroke="#8B5A2B" stroke-width="3"/>
+    <ellipse cx="100" cy="122" rx="30" ry="24" fill="#F6E1C4"/>
+    <circle cx="83" cy="96" r="7" fill="#3a2a17"/><circle cx="117" cy="96" r="7" fill="#3a2a17"/><circle cx="85" cy="94" r="2" fill="#fff"/><circle cx="119" cy="94" r="2" fill="#fff"/>
+    <ellipse cx="100" cy="114" rx="12" ry="9" fill="#3a2a17"/><path d="M100 123 L100 134" stroke="#3a2a17" stroke-width="4"/>
+    <path d="M100 134 Q88 140 84 132 M100 134 Q112 140 116 132" fill="none" stroke="#3a2a17" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="72" cy="112" r="7" fill="#FF97A8" opacity=".45"/><circle cx="128" cy="112" r="7" fill="#FF97A8" opacity=".45"/></svg>`,
 
-  maca:`<svg viewBox="0 0 200 200">
-    <path d="M100 60 C70 40 40 60 44 96 C48 140 78 170 100 170 C122 170 152 140 156 96 C160 60 130 40 100 60 Z" fill="#E63946" stroke="#b52836" stroke-width="4"/>
-    <path d="M100 62 C100 44 112 34 128 34" fill="none" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/>
-    <path d="M128 40 q26 -10 34 8 q-24 12 -34 -2 Z" fill="#4CAF50" stroke="#3a8a3d" stroke-width="3"/>
-    <ellipse cx="78" cy="92" rx="12" ry="16" fill="#fff" opacity="0.35"/></svg>`,
+  pato:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFFBE4"/><stop offset="1" stop-color="#FFF0B8"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE167"/><stop offset="1" stop-color="#FFC728"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <ellipse cx="102" cy="132" rx="58" ry="42" fill="url(#bd)" stroke="#E6A700" stroke-width="3"/>
+    <path d="M150 118 q30 -4 34 10 q-16 14 -34 4 Z" fill="#FFE9A0"/>
+    <circle cx="66" cy="80" r="34" fill="url(#bd)" stroke="#E6A700" stroke-width="3"/>
+    <circle cx="58" cy="74" r="6.5" fill="#222"/><circle cx="60" cy="72" r="2" fill="#fff"/>
+    <path d="M30 80 q-24 2 -24 11 q0 9 24 8 q6 -10 0 -19 Z" fill="#F5872E" stroke="#d96f18" stroke-width="2.5"/>
+    <circle cx="50" cy="92" r="6" fill="#FF97A8" opacity=".5"/></svg>`,
 
-  peixe:`<svg viewBox="0 0 200 200">
-    <polygon points="150,100 190,72 190,128" fill="#F5872E"/>
-    <ellipse cx="90" cy="100" rx="70" ry="46" fill="#4FC3F7" stroke="#2f9fd4" stroke-width="4"/>
-    <path d="M90 60 q18 -18 34 -6 q-6 14 -22 16 Z" fill="#8ED6F0"/>
-    <circle cx="52" cy="92" r="9" fill="#fff"/><circle cx="50" cy="92" r="4" fill="#111"/>
-    <path d="M64 116 q10 8 22 0 M92 116 q10 8 22 0" fill="none" stroke="#2f9fd4" stroke-width="3" stroke-linecap="round"/></svg>`,
+  peixe:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#E6FAFF"/><stop offset="1" stop-color="#C6EEFB"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5FCBF2"/><stop offset="1" stop-color="#2FA9DE"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="150,100 190,74 190,126" fill="#F5872E"/>
+    <ellipse cx="90" cy="102" rx="70" ry="46" fill="url(#bd)" stroke="#2790c4" stroke-width="3"/>
+    <path d="M90 62 q18 -18 34 -6 q-6 14 -22 16 Z" fill="#8FDBF7"/>
+    <circle cx="56" cy="94" r="11" fill="#fff"/><circle cx="54" cy="94" r="5" fill="#111"/><circle cx="56" cy="92" r="1.6" fill="#fff"/>
+    <path d="M66 118 q10 8 22 0 M92 118 q10 8 22 0" fill="none" stroke="#2790c4" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="76" cy="112" r="7" fill="#FF97A8" opacity=".5"/></svg>`,
 
-  estrela:`<svg viewBox="0 0 200 200">
-    <polygon points="100,22 122,78 182,80 134,118 150,178 100,142 50,178 66,118 18,80 78,78" fill="#FFD23F" stroke="#E6A700" stroke-width="5" stroke-linejoin="round"/>
-    <circle cx="86" cy="96" r="5" fill="#7a5a00"/><circle cx="114" cy="96" r="5" fill="#7a5a00"/>
-    <path d="M84 112 Q100 126 116 112" fill="none" stroke="#7a5a00" stroke-width="4" stroke-linecap="round"/></svg>`,
-
-  arvore:`<svg viewBox="0 0 200 200">
-    <rect x="88" y="120" width="24" height="60" rx="6" fill="#8B5A2B"/>
-    <circle cx="100" cy="80" r="42" fill="#4CAF50" stroke="#3a8a3d" stroke-width="4"/>
-    <circle cx="66" cy="100" r="30" fill="#57BB5B" stroke="#3a8a3d" stroke-width="4"/>
-    <circle cx="134" cy="100" r="30" fill="#57BB5B" stroke="#3a8a3d" stroke-width="4"/>
-    <circle cx="100" cy="106" r="34" fill="#66C86A"/>
-    <circle cx="86" cy="74" r="6" fill="#e63946"/><circle cx="118" cy="92" r="6" fill="#e63946"/></svg>`,
-
-  vaca:`<svg viewBox="0 0 200 200">
-    <polygon points="54,64 40,40 70,52" fill="#C9A24B"/><polygon points="146,64 160,40 130,52" fill="#C9A24B"/>
-    <ellipse cx="48" cy="96" rx="18" ry="12" fill="#F7B2C4"/><ellipse cx="152" cy="96" rx="18" ry="12" fill="#F7B2C4"/>
-    <circle cx="100" cy="100" r="54" fill="#fff" stroke="#cfcfcf" stroke-width="4"/>
-    <path d="M70 66 q18 -6 22 10 q-10 16 -26 6 Z" fill="#444"/>
-    <path d="M138 118 q-16 -4 -12 14 q14 10 22 -6 Z" fill="#444"/>
-    <ellipse cx="100" cy="132" rx="34" ry="24" fill="#F7B2C4" stroke="#e08aa0" stroke-width="3"/>
+  vaca:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EAFBF3"/><stop offset="1" stop-color="#CDEFDF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#EDEFF2"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <polygon points="52,62 38,38 70,52" fill="#CBA24B"/><polygon points="148,62 162,38 130,52" fill="#CBA24B"/>
+    <ellipse cx="46" cy="96" rx="18" ry="13" fill="#FFB7C9"/><ellipse cx="154" cy="96" rx="18" ry="13" fill="#FFB7C9"/>
+    <circle cx="100" cy="100" r="54" fill="url(#bd)" stroke="#cfcfcf" stroke-width="3"/>
+    <path d="M68 64 q18 -6 22 12 q-10 16 -26 6 Z" fill="#4a4a4a"/><path d="M140 118 q-16 -4 -12 16 q14 10 22 -6 Z" fill="#4a4a4a"/>
+    <ellipse cx="100" cy="132" rx="34" ry="24" fill="#FFB7C9" stroke="#e58aa0" stroke-width="3"/>
     <circle cx="88" cy="132" r="5" fill="#a85c72"/><circle cx="112" cy="132" r="5" fill="#a85c72"/>
-    <circle cx="80" cy="92" r="6" fill="#111"/><circle cx="120" cy="92" r="6" fill="#111"/></svg>`,
+    <circle cx="80" cy="92" r="7" fill="#222"/><circle cx="120" cy="92" r="7" fill="#222"/><circle cx="82" cy="90" r="2" fill="#fff"/><circle cx="122" cy="90" r="2" fill="#fff"/></svg>`,
 
-  rato:`<svg viewBox="0 0 200 200">
-    <circle cx="58" cy="66" r="30" fill="#B7BFC6"/><circle cx="142" cy="66" r="30" fill="#B7BFC6"/>
-    <circle cx="58" cy="66" r="16" fill="#F7B2C4"/><circle cx="142" cy="66" r="16" fill="#F7B2C4"/>
-    <circle cx="100" cy="110" r="50" fill="#C6CDD3" stroke="#9aa2a9" stroke-width="4"/>
-    <circle cx="84" cy="104" r="6" fill="#111"/><circle cx="116" cy="104" r="6" fill="#111"/>
-    <ellipse cx="100" cy="124" rx="9" ry="7" fill="#F7607A"/>
-    <path d="M148 140 q40 6 30 40" fill="none" stroke="#F7B2C4" stroke-width="7" stroke-linecap="round"/></svg>`,
+  rato:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F3F5F8"/><stop offset="1" stop-color="#DFE4EA"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CDD4DB"/><stop offset="1" stop-color="#AEB7C0"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="56" cy="64" r="30" fill="url(#bd)"/><circle cx="144" cy="64" r="30" fill="url(#bd)"/>
+    <circle cx="56" cy="64" r="16" fill="#FFB7C9"/><circle cx="144" cy="64" r="16" fill="#FFB7C9"/>
+    <path d="M150 138 q42 6 32 42" fill="none" stroke="#FFB7C9" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="100" cy="110" r="50" fill="url(#bd)" stroke="#98a1aa" stroke-width="3"/>
+    <circle cx="84" cy="104" r="7" fill="#111"/><circle cx="116" cy="104" r="7" fill="#111"/><circle cx="86" cy="102" r="2" fill="#fff"/><circle cx="118" cy="102" r="2" fill="#fff"/>
+    <ellipse cx="100" cy="124" rx="9" ry="7" fill="#FF6F8E"/>
+    <circle cx="74" cy="120" r="7" fill="#FF97A8" opacity=".5"/><circle cx="126" cy="120" r="7" fill="#FF97A8" opacity=".5"/></svg>`,
+
+  leao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF3E0"/><stop offset="1" stop-color="#FFE0B0"/></radialGradient>
+    <radialGradient id="mn" cx="50%" cy="50%" r="55%"><stop offset="0" stop-color="#F4A23C"/><stop offset="1" stop-color="#D97A1E"/></radialGradient>
+    <linearGradient id="fc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD79A"/><stop offset="1" stop-color="#F6BE6E"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <g fill="url(#mn)"><circle cx="100" cy="100" r="66"/>
+    <g fill="#E88A24"><circle cx="100" cy="30" r="14"/><circle cx="150" cy="50" r="14"/><circle cx="170" cy="100" r="14"/><circle cx="150" cy="150" r="14"/><circle cx="100" cy="170" r="14"/><circle cx="50" cy="150" r="14"/><circle cx="30" cy="100" r="14"/><circle cx="50" cy="50" r="14"/></g></g>
+    <circle cx="100" cy="100" r="48" fill="url(#fc)"/>
+    <circle cx="70" cy="66" r="14" fill="url(#mn)"/><circle cx="130" cy="66" r="14" fill="url(#mn)"/>
+    <circle cx="85" cy="96" r="6.5" fill="#3a2a17"/><circle cx="115" cy="96" r="6.5" fill="#3a2a17"/>
+    <polygon points="94,110 106,110 100,118" fill="#7a4a2a"/>
+    <path d="M100 118 Q100 126 108 128 M100 118 Q100 126 92 128" fill="none" stroke="#7a4a2a" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="74" cy="110" r="7" fill="#FF97A8" opacity=".45"/><circle cx="126" cy="110" r="7" fill="#FF97A8" opacity=".45"/></svg>`,
+
+  borboleta:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F3EEFF"/><stop offset="1" stop-color="#E1D6FF"/></radialGradient>
+    <linearGradient id="w1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9CC4"/><stop offset="1" stop-color="#FF6F8E"/></linearGradient>
+    <linearGradient id="w2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9E8CFF"/><stop offset="1" stop-color="#7A66E6"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <ellipse cx="66" cy="76" rx="34" ry="28" fill="url(#w1)" stroke="#E85E97" stroke-width="3"/>
+    <ellipse cx="134" cy="76" rx="34" ry="28" fill="url(#w1)" stroke="#E85E97" stroke-width="3"/>
+    <ellipse cx="72" cy="128" rx="28" ry="24" fill="url(#w2)" stroke="#6b5ad1" stroke-width="3"/>
+    <ellipse cx="128" cy="128" rx="28" ry="24" fill="url(#w2)" stroke="#6b5ad1" stroke-width="3"/>
+    <circle cx="66" cy="76" r="8" fill="#fff" opacity=".6"/><circle cx="134" cy="76" r="8" fill="#fff" opacity=".6"/>
+    <rect x="93" y="66" width="14" height="72" rx="7" fill="#5a4a34"/>
+    <path d="M96 66 q-8 -18 -20 -22 M104 66 q8 -18 20 -22" fill="none" stroke="#5a4a34" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="94" cy="80" r="3" fill="#fff"/><circle cx="106" cy="80" r="3" fill="#fff"/>
+    <path d="M94 90 Q100 96 106 90" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`,
+
+  abelha:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF8DE"/><stop offset="1" stop-color="#FFECAF"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD65A"/><stop offset="1" stop-color="#FBB918"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <ellipse cx="60" cy="82" rx="30" ry="22" fill="#fff" opacity=".85" stroke="#dfe6ee" stroke-width="2"/>
+    <ellipse cx="140" cy="82" rx="30" ry="22" fill="#fff" opacity=".85" stroke="#dfe6ee" stroke-width="2"/>
+    <ellipse cx="100" cy="110" rx="50" ry="46" fill="url(#bd)" stroke="#E09B12" stroke-width="3"/>
+    <path d="M78 72 A50 46 0 0 1 122 72 Z" fill="#3a2f2a" opacity=".9"/>
+    <rect x="55" y="96" width="90" height="14" rx="7" fill="#3a2f2a"/>
+    <rect x="62" y="124" width="76" height="13" rx="6.5" fill="#3a2f2a"/>
+    <circle cx="86" cy="86" r="6.5" fill="#3a2f2a"/><circle cx="114" cy="86" r="6.5" fill="#3a2f2a"/><circle cx="88" cy="84" r="2" fill="#fff"/><circle cx="116" cy="84" r="2" fill="#fff"/>
+    <path d="M62 44 q-4 -14 -14 -16 M138 44 q4 -14 14 -16" fill="none" stroke="#3a2f2a" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="48" cy="28" r="4" fill="#3a2f2a"/><circle cx="152" cy="28" r="4" fill="#3a2f2a"/></svg>`,
+
+  bola:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#F3F5F8"/><stop offset="1" stop-color="#DFE4EA"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <circle cx="100" cy="100" r="60" fill="#fff"/>
+    <path d="M100 40 A60 60 0 0 1 152 130 L100 100 Z" fill="#FF6B6B"/>
+    <path d="M152 130 A60 60 0 0 1 48 130 L100 100 Z" fill="#FFC93C"/>
+    <path d="M48 130 A60 60 0 0 1 100 40 L100 100 Z" fill="#4FC3F7"/>
+    <circle cx="100" cy="100" r="10" fill="#fff" stroke="#cfcfcf" stroke-width="2"/>
+    <ellipse cx="80" cy="70" rx="16" ry="10" fill="#fff" opacity=".45"/>
+    <circle cx="100" cy="100" r="60" fill="none" stroke="#c9c9c9" stroke-width="3"/></svg>`,
+
+  casa:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF3E9"/><stop offset="1" stop-color="#FCE0CE"/></radialGradient>
+    <linearGradient id="wl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD79A"/><stop offset="1" stop-color="#F6BE6E"/></linearGradient>
+    <linearGradient id="rf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0704A"/><stop offset="1" stop-color="#D9482A"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <rect x="48" y="94" width="104" height="80" rx="8" fill="url(#wl)" stroke="#d99a3a" stroke-width="3"/>
+    <polygon points="100,36 170,98 30,98" fill="url(#rf)" stroke="#b23c1c" stroke-width="3"/>
+    <rect x="88" y="124" width="30" height="50" rx="5" fill="#8B5A2B"/><circle cx="112" cy="150" r="3.5" fill="#FFD23F"/>
+    <rect x="58" y="114" width="26" height="26" rx="4" fill="#9BDDF5" stroke="#3aa9d4" stroke-width="3"/>
+    <line x1="71" y1="114" x2="71" y2="140" stroke="#3aa9d4" stroke-width="2"/><line x1="58" y1="127" x2="84" y2="127" stroke="#3aa9d4" stroke-width="2"/></svg>`,
+
+  carro:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#EAF3FF"/><stop offset="1" stop-color="#CFE4FB"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5FB0F2"/><stop offset="1" stop-color="#2E86DE"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M28 128 L34 106 Q40 90 60 88 L82 74 Q90 68 104 68 L138 70 Q150 71 158 88 L168 104 Q174 112 172 128 Z" fill="url(#bd)" stroke="#2270bd" stroke-width="3"/>
+    <path d="M84 78 Q92 74 102 74 L128 76 Q136 78 142 90 L96 90 Z" fill="#CDEBFF" stroke="#8fc7ec" stroke-width="2"/>
+    <rect x="24" y="122" width="152" height="16" rx="8" fill="#2270bd"/>
+    <circle cx="62" cy="140" r="20" fill="#333"/><circle cx="62" cy="140" r="8" fill="#bbb"/>
+    <circle cx="138" cy="140" r="20" fill="#333"/><circle cx="138" cy="140" r="8" fill="#bbb"/>
+    <circle cx="164" cy="106" r="7" fill="#FFE07A"/><ellipse cx="70" cy="100" rx="14" ry="8" fill="#fff" opacity=".35"/></svg>`,
+
+  maca:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFEFEF"/><stop offset="1" stop-color="#FFD6D6"/></radialGradient>
+    <radialGradient id="bd" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#FF6B6B"/><stop offset="1" stop-color="#D62839"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M100 62 C70 42 40 62 44 98 C48 142 78 172 100 172 C122 172 152 142 156 98 C160 62 130 42 100 62 Z" fill="url(#bd)" stroke="#b52836" stroke-width="3"/>
+    <path d="M100 64 C100 46 112 36 128 36" fill="none" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/>
+    <path d="M128 42 q26 -10 34 8 q-24 12 -34 -2 Z" fill="#4CAF50" stroke="#3a8a3d" stroke-width="2.5"/>
+    <ellipse cx="76" cy="92" rx="13" ry="18" fill="#fff" opacity=".38"/>
+    <circle cx="86" cy="108" r="5" fill="#7a1720"/><circle cx="114" cy="108" r="5" fill="#7a1720"/>
+    <path d="M86 122 Q100 134 114 122" fill="none" stroke="#7a1720" stroke-width="4.5" stroke-linecap="round"/></svg>`,
+
+  banana:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFFBE0"/><stop offset="1" stop-color="#FFF0AE"/></radialGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE267"/><stop offset="1" stop-color="#FBC22B"/></linearGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M46 70 Q40 130 92 158 Q150 176 168 120 Q150 150 104 138 Q66 124 68 74 Z" fill="url(#bd)" stroke="#E4A417" stroke-width="3"/>
+    <path d="M46 70 Q52 66 60 72 L68 74 Q64 66 56 62 Z" fill="#6B4A1E"/>
+    <path d="M162 116 q10 -2 8 8 q-8 4 -10 -4 Z" fill="#6B4A1E"/>
+    <path d="M74 96 Q80 132 116 142" fill="none" stroke="#E4A417" stroke-width="3" opacity=".6"/>
+    <circle cx="96" cy="120" r="5" fill="#7a5a12"/><circle cx="120" cy="126" r="5" fill="#7a5a12"/>
+    <path d="M98 132 Q109 140 120 134" fill="none" stroke="#7a5a12" stroke-width="4" stroke-linecap="round"/></svg>`,
+
+  balao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFF0F6"/><stop offset="1" stop-color="#FFDCEB"/></radialGradient>
+    <radialGradient id="bd" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#FF9CC4"/><stop offset="1" stop-color="#F0508D"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M100 150 q-18 12 -6 30" fill="none" stroke="#B0778F" stroke-width="3" stroke-linecap="round"/>
+    <path d="M100 44 C66 44 52 74 56 104 C60 132 82 150 100 150 C118 150 140 132 144 104 C148 74 134 44 100 44 Z" fill="url(#bd)" stroke="#D63A78" stroke-width="3"/>
+    <polygon points="94,150 106,150 100,160" fill="#D63A78"/>
+    <ellipse cx="82" cy="76" rx="12" ry="18" fill="#fff" opacity=".4"/>
+    <circle cx="88" cy="100" r="6" fill="#fff"/><circle cx="112" cy="100" r="6" fill="#fff"/>
+    <circle cx="88" cy="100" r="2.5" fill="#a0335f"/><circle cx="112" cy="100" r="2.5" fill="#a0335f"/>
+    <path d="M88 116 Q100 126 112 116" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>`,
+
+  coracao:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#FFEFF3"/><stop offset="1" stop-color="#FFD5E1"/></radialGradient>
+    <radialGradient id="bd" cx="40%" cy="34%" r="72%"><stop offset="0" stop-color="#FF7AA8"/><stop offset="1" stop-color="#E8447E"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="94" fill="url(#bg)"/>
+    <path d="M100 158 C40 118 46 66 82 62 C98 60 100 78 100 78 C100 78 102 60 118 62 C154 66 160 118 100 158 Z" fill="url(#bd)" stroke="#C93670" stroke-width="3"/>
+    <ellipse cx="78" cy="88" rx="12" ry="16" fill="#fff" opacity=".4"/>
+    <circle cx="86" cy="102" r="6" fill="#fff"/><circle cx="114" cy="102" r="6" fill="#fff"/>
+    <circle cx="86" cy="102" r="2.5" fill="#a52a5c"/><circle cx="114" cy="102" r="2.5" fill="#a52a5c"/>
+    <path d="M86 118 Q100 128 114 118" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>`,
 
   /* ---- Ícones do menu ---- */
-  icoSyl:`<svg viewBox="0 0 200 200">
-    <circle cx="60" cy="40" r="7" fill="#008f88"/><line x1="60" y1="47" x2="60" y2="54" stroke="#008f88" stroke-width="5"/>
-    <circle cx="140" cy="40" r="7" fill="#008f88"/><line x1="140" y1="47" x2="140" y2="54" stroke="#008f88" stroke-width="5"/>
-    <rect x="34" y="54" width="132" height="104" rx="18" fill="#00C2B8" stroke="#008f88" stroke-width="5"/>
-    <rect x="52" y="76" width="96" height="60" rx="10" fill="#04322f"/>
-    <text x="100" y="120" font-family="Comic Sans MS, sans-serif" font-size="40" font-weight="bold" fill="#7CFCE0" text-anchor="middle">BA</text></svg>`,
+  icoSyl:`<svg viewBox="0 0 200 200"><defs>
+    <linearGradient id="bd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#28d3c4"/><stop offset="1" stop-color="#00BFB2"/></linearGradient></defs>
+    <circle cx="60" cy="38" r="7" fill="#028f86"/><line x1="60" y1="45" x2="60" y2="54" stroke="#028f86" stroke-width="5"/>
+    <circle cx="140" cy="38" r="7" fill="#028f86"/><line x1="140" y1="45" x2="140" y2="54" stroke="#028f86" stroke-width="5"/>
+    <rect x="32" y="54" width="136" height="108" rx="20" fill="url(#bd)" stroke="#028f86" stroke-width="4"/>
+    <rect x="50" y="76" width="100" height="64" rx="12" fill="#053a37"/>
+    <text x="100" y="122" font-family="Baloo 2,Comic Sans MS,sans-serif" font-size="42" font-weight="800" fill="#7CFCE0" text-anchor="middle">BA</text>
+    <circle cx="66" cy="150" r="5" fill="#ffffff" opacity=".6"/><circle cx="134" cy="150" r="5" fill="#ffffff" opacity=".6"/></svg>`,
 
   icoLet:`<svg viewBox="0 0 200 200">
-    <text x="84" y="150" font-family="Comic Sans MS, sans-serif" font-size="130" font-weight="bold" fill="#FF6B6B" text-anchor="middle">A</text>
-    <g transform="rotate(38 150 110)">
-    <rect x="138" y="34" width="24" height="92" rx="4" fill="#FFD23F" stroke="#E6A700" stroke-width="3"/>
-    <rect x="138" y="34" width="24" height="16" fill="#F7607A"/>
-    <polygon points="138,126 162,126 150,156" fill="#F0D8B8" stroke="#c9a24b" stroke-width="2"/>
-    <polygon points="144,144 156,144 150,156" fill="#333"/></g></svg>`,
+    <text x="82" y="152" font-family="Baloo 2,Comic Sans MS,sans-serif" font-size="140" font-weight="800" fill="#FF6B6B" text-anchor="middle">A</text>
+    <g transform="rotate(38 150 108)">
+    <rect x="136" y="30" width="26" height="96" rx="5" fill="#FFC93C" stroke="#E6A700" stroke-width="3"/>
+    <rect x="136" y="30" width="26" height="16" fill="#FF7AA8"/>
+    <polygon points="136,126 162,126 149,158" fill="#F6E1C4" stroke="#c9a24b" stroke-width="2"/>
+    <polygon points="143,146 155,146 149,158" fill="#333"/></g></svg>`,
 
-  icoEng:`<svg viewBox="0 0 200 200">
-    <circle cx="100" cy="100" r="66" fill="#4FC3F7" stroke="#2f9fd4" stroke-width="5"/>
-    <path d="M40 88 q30 -14 60 0 t60 0" fill="none" stroke="#fff" stroke-width="4"/>
-    <path d="M40 118 q30 14 60 0 t60 0" fill="none" stroke="#fff" stroke-width="4"/>
-    <ellipse cx="100" cy="100" rx="30" ry="66" fill="none" stroke="#fff" stroke-width="4"/>
-    <line x1="34" y1="100" x2="166" y2="100" stroke="#fff" stroke-width="4"/>
-    <path d="M66 70 q10 20 -2 34 q22 6 20 26" fill="#7CCB6B" opacity="0.85"/>
-    <path d="M120 60 q18 8 14 26 q-16 4 -10 20" fill="#7CCB6B" opacity="0.85"/></svg>`
+  icoEng:`<svg viewBox="0 0 200 200"><defs>
+    <radialGradient id="bd" cx="42%" cy="36%" r="70%"><stop offset="0" stop-color="#6FC7F7"/><stop offset="1" stop-color="#2E86DE"/></radialGradient></defs>
+    <circle cx="100" cy="100" r="68" fill="url(#bd)" stroke="#2270bd" stroke-width="4"/>
+    <path d="M40 86 q30 -14 60 0 t60 0" fill="none" stroke="#fff" stroke-width="4"/>
+    <path d="M40 116 q30 14 60 0 t60 0" fill="none" stroke="#fff" stroke-width="4"/>
+    <ellipse cx="100" cy="100" rx="30" ry="68" fill="none" stroke="#fff" stroke-width="4"/>
+    <line x1="32" y1="100" x2="168" y2="100" stroke="#fff" stroke-width="4"/>
+    <path d="M64 70 q10 20 -2 34 q22 6 20 26" fill="#7CCB6B" opacity=".9"/>
+    <path d="M122 60 q18 8 14 26 q-16 4 -10 20" fill="#7CCB6B" opacity=".9"/>
+    <ellipse cx="76" cy="70" rx="12" ry="7" fill="#fff" opacity=".35"/></svg>`
 };
+
+/* ids únicos por render -> nunca há colisões de gradientes */
+let _uid=0;
+function art(key){
+  const s = ART[key]; if(!s) return '';
+  const n = '_a'+(_uid++);
+  return s.replace(/id="([^"]+)"/g,(m,p)=>`id="${p}${n}"`).replace(/url\(#([^)]+)\)/g,(m,p)=>`url(#${p}${n})`);
+}
+
+/* =========================================================
+   DADOS (uma só lista alimenta os dois jogos de escolha)
+   ========================================================= */
+const ITEMS = [
+  {k:'sol',pt:'Sol',L:'S',en:'sun'},        {k:'lua',pt:'Lua',L:'L',en:'moon'},
+  {k:'estrela',pt:'Estrela',L:'E',en:'star'},{k:'nuvem',pt:'Nuvem',L:'N',en:'cloud'},
+  {k:'flor',pt:'Flor',L:'F',en:'flower'},   {k:'arvore',pt:'Árvore',L:'A',en:'tree'},
+  {k:'gato',pt:'Gato',L:'G',en:'cat'},      {k:'cao',pt:'Cão',L:'C',en:'dog'},
+  {k:'pato',pt:'Pato',L:'P',en:'duck'},     {k:'peixe',pt:'Peixe',L:'P',en:'fish'},
+  {k:'vaca',pt:'Vaca',L:'V',en:'cow'},      {k:'rato',pt:'Rato',L:'R',en:'mouse'},
+  {k:'leao',pt:'Leão',L:'L',en:'lion'},     {k:'borboleta',pt:'Borboleta',L:'B',en:'butterfly'},
+  {k:'abelha',pt:'Abelha',L:'A',en:'bee'},  {k:'bola',pt:'Bola',L:'B',en:'ball'},
+  {k:'casa',pt:'Casa',L:'C',en:'house'},    {k:'carro',pt:'Carro',L:'C',en:'car'},
+  {k:'maca',pt:'Maçã',L:'M',en:'apple'},    {k:'banana',pt:'Banana',L:'B',en:'banana'},
+  {k:'balao',pt:'Balão',L:'B',en:'balloon'},{k:'coracao',pt:'Coração',L:'C',en:'heart'}
+];
+const ABC = ['A','B','C','D','E','F','G','L','M','N','O','P','R','S','T','U','V'];
 
 /* =========================================================
    VOZ (PT-PT / Inglês)
@@ -354,7 +563,6 @@ let voices = [];
 function loadVoices(){ voices = synth.getVoices(); }
 loadVoices();
 if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
-
 function pickVoice(lang){
   if(lang.startsWith('pt'))
     return voices.find(v=>v.lang==='pt-PT'||v.lang==='pt_PT'||(v.lang.toLowerCase().startsWith('pt')&&/portugal/i.test(v.name)))
@@ -362,30 +570,39 @@ function pickVoice(lang){
   return voices.find(v=>v.lang==='en-GB') || voices.find(v=>v.lang.toLowerCase().startsWith('en'));
 }
 function speak(text, lang='pt-PT', rate=0.72){
-  if(!text) return;
-  synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  const v = pickVoice(lang); if(v) u.voice=v;
-  u.lang=lang; u.rate=rate; u.pitch=1.05;
-  synth.speak(u);
+  if(!text) return; synth.cancel();
+  const u=new SpeechSynthesisUtterance(text); const v=pickVoice(lang); if(v) u.voice=v;
+  u.lang=lang; u.rate=rate; u.pitch=1.05; synth.speak(u);
 }
-/* fala vários pedaços em sequência (ex.: PT depois Inglês) */
 function speakSeq(items){
-  synth.cancel();
-  let i=0;
+  synth.cancel(); let i=0;
   (function next(){
     if(i>=items.length) return;
-    const it=items[i++];
-    const u=new SpeechSynthesisUtterance(it.t);
+    const it=items[i++]; const u=new SpeechSynthesisUtterance(it.t);
     const v=pickVoice(it.l||'pt-PT'); if(v) u.voice=v;
     u.lang=it.l||'pt-PT'; u.rate=it.r||0.72; u.pitch=1.05;
-    u.onend=()=>setTimeout(next,220);
-    synth.speak(u);
+    u.onend=()=>setTimeout(next,240); synth.speak(u);
   })();
+}
+/* nomes das letras em PT (para a criança ouvir a sua escolha) */
+const LETTER_NAME={A:'á',E:'é',I:'i',O:'ó',U:'u',B:'bê',C:'cê',D:'dê',F:'efe',G:'guê',
+  L:'ele',M:'eme',N:'ene',P:'pê',R:'erre',S:'esse',T:'tê',V:'vê'};
+function sayLetter(l){ return 'letra '+(LETTER_NAME[l]||l); }
+
+/* saco baralhado: cada item sai uma vez por ciclo (máxima variedade) */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+function makeBag(n){ return {order:[],i:0,n:n}; }
+function drawBag(bag){
+  if(bag.i>=bag.order.length){
+    let arr=shuffle([...Array(bag.n).keys()]);
+    if(bag.order.length && arr[0]===bag.order[bag.order.length-1] && bag.n>1){ [arr[0],arr[1]]=[arr[1],arr[0]]; }
+    bag.order=arr; bag.i=0;
+  }
+  return bag.order[bag.i++];
 }
 
 /* =========================================================
-   NAVEGAÇÃO ENTRE ECRÃS
+   NAVEGAÇÃO
    ========================================================= */
 function showScreen(id){
   synth.cancel();
@@ -394,202 +611,160 @@ function showScreen(id){
   if(id==='g-let') newLetterRound();
   if(id==='g-eng') newEnglishRound();
 }
-
-/* renderiza ilustrações marcadas com data-art */
-document.querySelectorAll('[data-art]').forEach(el=>{ el.innerHTML = ART[el.dataset.art]||''; });
-
-/* Arranque -> desbloqueia áudio e mostra o menu */
-document.getElementById('start-btn').addEventListener('click', ()=>{
-  speak('Olá! Vamos brincar.');
-  showScreen('menu');
-});
-
-/* Cartões do menu */
+document.querySelectorAll('[data-art]').forEach(el=>{ el.innerHTML = art(el.dataset.art); });
+document.getElementById('start-btn').addEventListener('click', ()=>{ speak('Olá! Vamos brincar.'); showScreen('menu'); });
 document.querySelectorAll('.card').forEach(card=>{
-  card.addEventListener('click', ()=>{
-    speak(card.dataset.say);
-    setTimeout(()=>showScreen(card.dataset.go), 550);
-  });
+  card.addEventListener('click', ()=>{ speak(card.dataset.say); setTimeout(()=>showScreen(card.dataset.go),550); });
 });
-
-/* Botões casa */
-document.querySelectorAll('[data-home]').forEach(b=>{
-  b.addEventListener('click', ()=>{ speak('Menu'); showScreen('menu'); });
-});
+document.querySelectorAll('[data-home]').forEach(b=>{ b.addEventListener('click', ()=>{ speak('Menu'); showScreen('menu'); }); });
 
 /* =========================================================
-   CELEBRAÇÃO (estrelas + confetti)
+   CELEBRAÇÃO
    ========================================================= */
 function celebrate(){
-  const c=document.getElementById('cheer');
-  c.classList.add('show');
-  const cols=['#FF6B6B','#FFD23F','#00C2B8','#8E7CFF','#4CC36B'];
-  for(let i=0;i<18;i++){
-    const p=document.createElement('div');
-    p.className='confetti';
-    p.style.left=Math.random()*100+'vw';
-    p.style.background=cols[i%cols.length];
+  const c=document.getElementById('cheer'); c.classList.add('show');
+  const cols=['#FF6B6B','#FFC93C','#00BFB2','#8E7CFF','#37c26b','#FF7AA8'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div'); p.className='confetti';
+    p.style.left=Math.random()*100+'vw'; p.style.background=cols[i%cols.length];
     p.style.animation=`fall ${1+Math.random()}s ease-in forwards`;
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),2000);
+    document.body.appendChild(p); setTimeout(()=>p.remove(),2100);
   }
   setTimeout(()=>c.classList.remove('show'),1200);
 }
 
 /* =========================================================
-   JOGO 1 — MÁQUINA DE SÍLABAS (arrastar vogais)
+   JOGO 1 — MÁQUINA DE SÍLABAS (com descoberta de palavras)
    ========================================================= */
 const CONS = ['B','D','F','G','L','M','N','P','R','S','T','V'];
-const SYL = {
-  B:{art:'bola'}, P:{art:'pato'}, M:{art:'maca'}, L:{art:'lua'}, F:{art:'flor'},
-  S:{art:'sol'}, R:{art:'rato'}, V:{art:'vaca'}, G:{art:'gato'},
-  D:{emoji:'🎲'}, N:{emoji:'🔢'}, T:{emoji:'🚂'}
+/* sílaba (consoante+vogal) -> palavra real + ilustração */
+const SYL_WORDS = {
+  BA:{w:'BALÃO',k:'balao'}, BO:{w:'BOLA',k:'bola'}, GA:{w:'GATO',k:'gato'},
+  PA:{w:'PATO',k:'pato'}, PE:{w:'PEIXE',k:'peixe'}, CA:{w:'CASA',k:'casa'},
+  CO:{w:'CORAÇÃO',k:'coracao'}, MA:{w:'MAÇÃ',k:'maca'}, LU:{w:'LUA',k:'lua'},
+  LE:{w:'LEÃO',k:'leao'}, SO:{w:'SOL',k:'sol'}, RA:{w:'RATO',k:'rato'},
+  VA:{w:'VACA',k:'vaca'}, NU:{w:'NUVEM',k:'nuvem'}
 };
-let activeCon = 'V';
-
+/* ilustração decorativa por consoante (quando não há palavra) */
+const CON_ART = {B:'bola',F:'flor',G:'gato',L:'lua',M:'maca',N:'nuvem',P:'pato',R:'rato',S:'sol',V:'vaca',D:'estrela',T:'borboleta'};
+let activeCon='V';
 function phonetic(t){ return t.replace(/A/g,'Á').replace(/E/g,'É').replace(/O/g,'Ó'); }
-function randomCon(){
-  activeCon = CONS[Math.floor(Math.random()*CONS.length)];
-  document.getElementById('syl-con').innerText = activeCon;
-  speak('Letra '+activeCon);
-}
+function randomCon(){ activeCon=CONS[(Math.random()*CONS.length)|0]; document.getElementById('syl-con').innerText=activeCon; speak(sayLetter(activeCon)); }
 document.getElementById('syl-random').addEventListener('click', randomCon);
 
 let dragEl=null;
 document.querySelectorAll('.vowel').forEach(card=>{
-  card.addEventListener('touchstart', e=>{
-    startDrag(card, e.touches[0]);
-    speak('Letra '+phonetic(card.dataset.v));
-  }, {passive:true});
-  card.addEventListener('mousedown', e=>{ startDrag(card,e); speak('Letra '+phonetic(card.dataset.v)); });
+  card.addEventListener('touchstart', e=>{ startDrag(card,e.touches[0]); speak(sayLetter(card.dataset.v)); }, {passive:true});
+  card.addEventListener('mousedown', e=>{ startDrag(card,e); speak(sayLetter(card.dataset.v)); });
 });
-function startDrag(card, pt){
-  dragEl = card.cloneNode(true);
-  Object.assign(dragEl.style,{position:'fixed', zIndex:1000, left:(pt.clientX-36)+'px', top:(pt.clientY-36)+'px', opacity:.95});
-  dragEl.dataset.v = card.dataset.v;
-  document.body.appendChild(dragEl);
-}
-function moveDrag(pt){
-  if(!dragEl) return;
-  dragEl.style.left=(pt.clientX-36)+'px'; dragEl.style.top=(pt.clientY-36)+'px';
+function startDrag(card,pt){ dragEl=card.cloneNode(true);
+  Object.assign(dragEl.style,{position:'fixed',zIndex:1000,left:(pt.clientX-38)+'px',top:(pt.clientY-38)+'px',opacity:.95});
+  dragEl.dataset.v=card.dataset.v; document.body.appendChild(dragEl); }
+function moveDrag(pt){ if(!dragEl) return;
+  dragEl.style.left=(pt.clientX-38)+'px'; dragEl.style.top=(pt.clientY-38)+'px';
   const d=document.getElementById('syl-drop').getBoundingClientRect();
-  const over = pt.clientX>d.left&&pt.clientX<d.right&&pt.clientY>d.top&&pt.clientY<d.bottom;
-  document.getElementById('syl-drop').classList.toggle('hot', over);
-}
-window.addEventListener('touchmove', e=>{ if(dragEl){ moveDrag(e.touches[0]); } }, {passive:true});
+  document.getElementById('syl-drop').classList.toggle('hot', pt.clientX>d.left&&pt.clientX<d.right&&pt.clientY>d.top&&pt.clientY<d.bottom); }
+window.addEventListener('touchmove', e=>{ if(dragEl) moveDrag(e.touches[0]); }, {passive:true});
 window.addEventListener('mousemove', e=>{ if(dragEl) moveDrag(e); });
-function endDrag(pt){
-  if(!dragEl) return;
-  const drop=document.getElementById('syl-drop');
-  const d=drop.getBoundingClientRect();
-  drop.classList.remove('hot');
-  if(pt.clientX>d.left&&pt.clientX<d.right&&pt.clientY>d.top&&pt.clientY<d.bottom){
-    dropVowel(dragEl.dataset.v);
-  }
-  dragEl.remove(); dragEl=null;
-}
+function endDrag(pt){ if(!dragEl) return;
+  const drop=document.getElementById('syl-drop'), d=drop.getBoundingClientRect(); drop.classList.remove('hot');
+  if(pt.clientX>d.left&&pt.clientX<d.right&&pt.clientY>d.top&&pt.clientY<d.bottom) dropVowel(dragEl.dataset.v);
+  dragEl.remove(); dragEl=null; }
 window.addEventListener('touchend', e=>{ if(dragEl) endDrag(e.changedTouches[0]); });
 window.addEventListener('mouseup', e=>{ if(dragEl) endDrag(e); });
 
 function dropVowel(v){
-  const drop=document.getElementById('syl-drop');
-  const res=document.getElementById('syl-result');
-  const info=SYL[activeCon]||{};
+  const drop=document.getElementById('syl-drop'), res=document.getElementById('syl-result');
+  const syl=activeCon+v, word=SYL_WORDS[syl];
   drop.innerText=v;
-  document.getElementById('syl-ri').innerHTML = info.art ? ART[info.art] : `<span class="emoji">${info.emoji||'✨'}</span>`;
-  document.getElementById('syl-rt').innerText = activeCon+v;
+  if(word){
+    document.getElementById('syl-ri').innerHTML=art(word.k);
+    document.getElementById('syl-rt').innerText=word.w;
+    speakSeq([{t:phonetic(syl)},{t:word.w,r:0.8}]);
+  } else {
+    document.getElementById('syl-ri').innerHTML=art(CON_ART[activeCon]||'estrela');
+    document.getElementById('syl-rt').innerText=syl;
+    speak(activeCon+phonetic(v));
+  }
   res.classList.add('show');
-  speak(activeCon+phonetic(v));
-  setTimeout(()=>{ res.classList.remove('show'); drop.innerText='?'; }, 2200);
+  setTimeout(()=>{ res.classList.remove('show'); drop.innerText='?'; }, word?2600:2200);
 }
 
 /* =========================================================
-   JOGO 2 — PRIMEIRAS LETRAS (que letra começa?)
+   JOGO 2 — PRIMEIRAS LETRAS (ouve-se sempre a letra escolhida)
    ========================================================= */
-const LET_WORDS = [
-  {k:'sol',w:'Sol',L:'S'}, {k:'lua',w:'Lua',L:'L'}, {k:'gato',w:'Gato',L:'G'},
-  {k:'pato',w:'Pato',L:'P'}, {k:'bola',w:'Bola',L:'B'}, {k:'flor',w:'Flor',L:'F'},
-  {k:'casa',w:'Casa',L:'C'}, {k:'maca',w:'Maçã',L:'M'}, {k:'peixe',w:'Peixe',L:'P'},
-  {k:'estrela',w:'Estrela',L:'E'}, {k:'arvore',w:'Árvore',L:'A'}, {k:'vaca',w:'Vaca',L:'V'},
-  {k:'rato',w:'Rato',L:'R'}
-];
-const LET_POOL = ['A','B','C','D','E','F','G','L','M','N','O','P','R','S','T','U','V'];
-let letCurrent=null, letLast=-1;
-
-function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
-
+const letBag=makeBag(ITEMS.length);
+let letCur=null, letSolved=false, letBusy=false;
 function newLetterRound(){
-  let idx; do{ idx=(Math.random()*LET_WORDS.length)|0; }while(idx===letLast&&LET_WORDS.length>1);
-  letLast=idx; letCurrent=LET_WORDS[idx];
-  document.getElementById('let-art').innerHTML = ART[letCurrent.k];
-  const distract = shuffle(LET_POOL.filter(l=>l!==letCurrent.L)).slice(0,2);
-  const opts = shuffle([letCurrent.L, ...distract]);
-  const box = document.getElementById('let-opts'); box.innerHTML='';
-  opts.forEach(l=>{
-    const el=document.createElement('div'); el.className='opt-letter'; el.innerText=l; el.dataset.l=l;
-    el.addEventListener('click', ()=>chooseLetter(el, l));
-    box.appendChild(el);
-  });
-  setTimeout(()=>speakLetterPrompt(), 400);
+  letSolved=false; letBusy=false;
+  letCur=ITEMS[drawBag(letBag)];
+  const round=document.getElementById('let-round');
+  round.classList.remove('in');
+  document.getElementById('let-art').innerHTML=art(letCur.k);
+  const distract=shuffle(ABC.filter(l=>l!==letCur.L)).slice(0,2);
+  const opts=shuffle([letCur.L,...distract]);
+  const box=document.getElementById('let-opts'); box.innerHTML='';
+  opts.forEach(l=>{ const el=document.createElement('div'); el.className='opt-letter'; el.innerText=l; el.dataset.l=l;
+    el.addEventListener('click',()=>chooseLetter(el,l)); box.appendChild(el); });
+  requestAnimationFrame(()=>round.classList.add('in'));
+  setTimeout(letterPrompt, 650);   /* pausa antes de falar */
 }
-function speakLetterPrompt(){
-  speakSeq([{t:letCurrent.w, r:0.8}, {t:'Com que letra começa?', r:0.85}]);
+function letterPrompt(){
+  if(letSolved) speakSeq([{t:letCur.pt,r:0.8},{t:'começa com a '+sayLetter(letCur.L),r:0.75}]);
+  else speakSeq([{t:letCur.pt,r:0.8},{t:'Com que letra começa?',r:0.85}]);
 }
-document.getElementById('let-ear').addEventListener('click', speakLetterPrompt);
-
-function chooseLetter(el, l){
-  if(l===letCurrent.L){
+document.getElementById('let-ear').addEventListener('click', letterPrompt);
+function chooseLetter(el,l){
+  if(letSolved||letBusy) return;
+  if(l===letCur.L){
+    letSolved=true; letBusy=true;
     el.classList.add('pick-right');
-    speakSeq([{t:'Boa!'}, {t:`${letCurrent.w} começa com a letra ${letCurrent.L}.`, r:0.75}]);
+    document.querySelectorAll('#let-opts .opt-letter').forEach(o=>{ if(o!==el) o.classList.add('dim'); });
+    /* ouve-se a letra escolhida, depois a confirmação */
+    speakSeq([{t:sayLetter(l),r:0.8},{t:'Boa!'},{t:letCur.pt+' começa com a '+sayLetter(letCur.L)+'.',r:0.78}]);
     celebrate();
-    setTimeout(newLetterRound, 2600);
+    setTimeout(newLetterRound, 3200);   /* pausa clara entre puzzles */
   } else {
-    el.classList.add('shake');
-    setTimeout(()=>el.classList.remove('shake'),450);
-    speak('Quase! Tenta outra vez.', 'pt-PT', 0.8);
+    letBusy=true;
+    el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),450);
+    speakSeq([{t:sayLetter(l),r:0.8},{t:'Não é essa. Tenta outra vez.',r:0.82}]);
+    setTimeout(()=>{ letBusy=false; }, 1200);   /* pequena pausa antes de nova tentativa */
   }
 }
 
 /* =========================================================
-   JOGO 3 — INGLÊS (ouve em inglês, escolhe a imagem)
+   JOGO 3 — INGLÊS (saco baralhado -> muita variedade)
    ========================================================= */
-const ENG_WORDS = [
-  {k:'gato',pt:'gato',en:'cat'}, {k:'cao',pt:'cão',en:'dog'}, {k:'sol',pt:'sol',en:'sun'},
-  {k:'lua',pt:'lua',en:'moon'}, {k:'bola',pt:'bola',en:'ball'}, {k:'flor',pt:'flor',en:'flower'},
-  {k:'casa',pt:'casa',en:'house'}, {k:'maca',pt:'maçã',en:'apple'}, {k:'peixe',pt:'peixe',en:'fish'},
-  {k:'estrela',pt:'estrela',en:'star'}, {k:'arvore',pt:'árvore',en:'tree'}, {k:'vaca',pt:'vaca',en:'cow'},
-  {k:'pato',pt:'pato',en:'duck'}, {k:'rato',pt:'rato',en:'mouse'}
-];
-let engCurrent=null, engLast=-1;
-
+const engBag=makeBag(ITEMS.length);
+let engCur=null, engSolved=false, engBusy=false;
 function newEnglishRound(){
-  let idx; do{ idx=(Math.random()*ENG_WORDS.length)|0; }while(idx===engLast&&ENG_WORDS.length>1);
-  engLast=idx; engCurrent=ENG_WORDS[idx];
-  const others = shuffle(ENG_WORDS.filter(w=>w.k!==engCurrent.k)).slice(0,2);
-  const opts = shuffle([engCurrent, ...others]);
-  const box = document.getElementById('eng-opts'); box.innerHTML='';
-  opts.forEach(w=>{
-    const el=document.createElement('div'); el.className='opt-img'; el.innerHTML=ART[w.k]; el.dataset.k=w.k;
-    el.addEventListener('click', ()=>chooseEnglish(el, w));
-    box.appendChild(el);
-  });
-  setTimeout(()=>speakEnglishPrompt(), 400);
+  engSolved=false; engBusy=false;
+  engCur=ITEMS[drawBag(engBag)];
+  const others=shuffle(ITEMS.filter(w=>w.k!==engCur.k)).slice(0,2);
+  const opts=shuffle([engCur,...others]);
+  const round=document.getElementById('eng-round'); round.classList.remove('in');
+  const box=document.getElementById('eng-opts'); box.innerHTML='';
+  opts.forEach(w=>{ const el=document.createElement('div'); el.className='opt-img'; el.innerHTML=art(w.k); el.dataset.k=w.k;
+    el.addEventListener('click',()=>chooseEnglish(el,w)); box.appendChild(el); });
+  requestAnimationFrame(()=>round.classList.add('in'));
+  setTimeout(englishPrompt, 650);
 }
-function speakEnglishPrompt(){
-  speakSeq([{t:'Onde está...', r:0.85}, {t:engCurrent.en, l:'en-GB', r:0.8}]);
-}
-document.getElementById('eng-ear').addEventListener('click', speakEnglishPrompt);
-
-function chooseEnglish(el, w){
-  if(w.k===engCurrent.k){
+function englishPrompt(){ speakSeq([{t:'Onde está...',r:0.85},{t:engCur.en,l:'en-GB',r:0.8}]); }
+document.getElementById('eng-ear').addEventListener('click', englishPrompt);
+function chooseEnglish(el,w){
+  if(engSolved||engBusy) return;
+  if(w.k===engCur.k){
+    engSolved=true; engBusy=true;
     el.classList.add('pick-right');
-    speakSeq([{t:'Boa!'}, {t:engCurrent.en, l:'en-GB', r:0.75}, {t:'é '+engCurrent.pt, r:0.8}]);
+    document.querySelectorAll('#eng-opts .opt-img').forEach(o=>{ if(o!==el) o.classList.add('dim'); });
+    speakSeq([{t:'Boa!'},{t:engCur.en,l:'en-GB',r:0.75},{t:'é '+engCur.pt,r:0.8}]);
     celebrate();
-    setTimeout(newEnglishRound, 2800);
+    setTimeout(newEnglishRound, 3400);
   } else {
-    el.classList.add('shake');
-    setTimeout(()=>el.classList.remove('shake'),450);
-    speakSeq([{t:'Tenta outra vez.', r:0.8}, {t:engCurrent.en, l:'en-GB', r:0.8}]);
+    engBusy=true;
+    el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),450);
+    speakSeq([{t:'Tenta outra vez.',r:0.82},{t:engCur.en,l:'en-GB',r:0.8}]);
+    setTimeout(()=>{ engBusy=false; }, 1200);
   }
 }
 </script>
