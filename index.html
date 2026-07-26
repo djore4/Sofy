@@ -3,207 +3,595 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Máquina de Sílabas - Fonética PT-PT Final</title>
+    <title>Aprender a Brincar</title>
     <style>
-        :root { --machine-color: #333; --neon-blue: #00fbff; --accent: #ff007a; --bg: #1a1a1a; }
-        body { margin: 0; padding: 0; font-family: 'Comic Sans MS', sans-serif; background: var(--bg); color: white; overflow: hidden; touch-action: none; text-align: center; }
-        
-        #start-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 5000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        :root{
+            --coral:#FF6B6B; --teal:#00C2B8; --sun:#FFD23F; --purple:#8E7CFF;
+            --sky1:#BEE7FF; --sky2:#EAF7FF; --ink:#2b3a4a; --good:#4CC36B;
         }
-        #start-btn {
-            padding: 30px 60px; font-size: 2.5rem; background: var(--accent);
-            color: white; border: none; border-radius: 60px; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 0, 122, 0.4); font-weight: bold;
-        }
-
-        .game-world { display: flex; flex-direction: column; align-items: center; justify-content: space-around; height: 100vh; padding: 10px; }
-        
-        #random-btn {
-            padding: 15px 30px; font-size: 1.2rem; background: #4ecca3;
-            color: #1a1a1a; border: none; border-radius: 15px; font-weight: bold;
-            margin-bottom: 10px; box-shadow: 0 5px #388e3c;
+        *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+        html,body{height:100%;}
+        body{
+            margin:0; font-family:'Comic Sans MS','Baloo 2','Segoe UI',sans-serif;
+            color:var(--ink); overflow:hidden; touch-action:manipulation;
+            background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 100%);
+            text-align:center; user-select:none;
         }
 
-        .machine-container { 
-            position: relative; width: 90%; max-width: 400px; height: 220px; 
-            background: var(--machine-color); border-radius: 30px; 
-            border: 10px solid #444; display: flex; align-items: center; 
-            justify-content: center; box-shadow: inset 0 0 20px #000;
-        }
+        /* ---------- Ecrãs ---------- */
+        .screen{position:fixed; inset:0; display:none; flex-direction:column;
+            align-items:center; justify-content:center; padding:16px;}
+        .screen.active{display:flex; animation:fadeIn .35s ease;}
+        @keyframes fadeIn{from{opacity:0; transform:scale(.98);} to{opacity:1; transform:scale(1);}}
 
-        .consonant-fixed { 
-            font-size: 7rem; font-weight: 900; color: var(--neon-blue); 
-            margin-right: 15px; text-shadow: 0 0 20px var(--neon-blue);
+        /* ---------- Arranque ---------- */
+        #start .cloud{font-size:1.1rem; color:#5a6b7a;}
+        #start h1{font-size:2.4rem; margin:8px 0 4px; color:var(--ink); text-shadow:0 2px 0 #fff;}
+        #start-btn{
+            margin-top:26px; padding:26px 54px; font-size:2rem; font-weight:bold;
+            color:#fff; background:var(--coral); border:none; border-radius:40px; cursor:pointer;
+            box-shadow:0 8px 0 #d94f4f, 0 14px 24px rgba(217,79,79,.35);
+            animation:bob 1.6s ease-in-out infinite;
         }
+        #start-btn:active{transform:translateY(6px); box-shadow:0 2px 0 #d94f4f;}
+        @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 
-        .vowel-drop-zone { 
-            width: 110px; height: 140px; border: 5px dashed rgba(255,255,255,0.2); 
-            border-radius: 20px; display: flex; align-items: center; 
-            justify-content: center; font-size: 7rem; font-weight: 900; color: var(--accent); 
+        /* ---------- Menu ---------- */
+        #menu h1{font-size:2rem; margin:0 0 4px; text-shadow:0 2px 0 #fff;}
+        #menu p{margin:0 0 20px; color:#5a6b7a; font-size:1.05rem;}
+        .cards{display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:stretch; max-width:920px;}
+        .card{
+            width:250px; max-width:42vw; min-width:180px; background:#fff; border-radius:28px;
+            padding:20px 16px 22px; cursor:pointer; border:5px solid #fff;
+            box-shadow:0 10px 0 rgba(0,0,0,.10), 0 16px 30px rgba(0,0,0,.12);
+            transition:transform .15s ease; display:flex; flex-direction:column; align-items:center;
         }
+        .card:active{transform:translateY(6px) scale(.98);}
+        .card .art{width:120px; height:120px; margin-bottom:6px;}
+        .card .art svg{width:100%; height:100%; display:block;}
+        .card .name{font-size:1.35rem; font-weight:bold; margin-top:6px;}
+        .card .sub{font-size:.9rem; color:#7a8794;}
+        .card.c1{border-color:var(--teal);}   .card.c1 .name{color:var(--teal);}
+        .card.c2{border-color:var(--coral);}  .card.c2 .name{color:var(--coral);}
+        .card.c3{border-color:var(--purple);} .card.c3 .name{color:var(--purple);}
 
-        .vowel-carousel { display: flex; gap: 10px; padding: 20px; overflow-x: auto; width: 100%; justify-content: center; }
-        .vowel-card { 
-            min-width: 65px; height: 65px; background: var(--accent); 
-            border-radius: 15px; display: flex; align-items: center; 
-            justify-content: center; font-size: 2.5rem; font-weight: bold; 
-            box-shadow: 0 5px #9d004b;
+        /* ---------- Botões flutuantes ---------- */
+        .home-btn,.ear-btn{
+            position:fixed; top:14px; z-index:50; width:62px; height:62px; border:none;
+            border-radius:50%; font-size:1.7rem; cursor:pointer; color:#fff;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 5px 0 rgba(0,0,0,.18);
         }
+        .home-btn{left:14px; background:var(--coral);}
+        .ear-btn{right:14px; background:var(--teal);}
+        .home-btn:active,.ear-btn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.18);}
 
-        #result-display { position: fixed; top: 25%; left: 50%; transform: translate(-50%, -50%) scale(0); transition: 0.5s; z-index: 100; pointer-events: none; }
-        #result-display.show { transform: translate(-50%, -50%) scale(1.8); }
-        .result-image { font-size: 6rem; display: block; }
-        .result-text { font-size: 2.5rem; font-weight: bold; color: #f9d423; }
+        .game-title{position:fixed; top:22px; left:50%; transform:translateX(-50%);
+            font-size:1.3rem; font-weight:bold; color:var(--ink); text-shadow:0 2px 0 #fff; z-index:40;}
+
+        /* ---------- Jogo Sílabas ---------- */
+        #g-syl .stage{display:flex; flex-direction:column; align-items:center; gap:18px; width:100%; max-width:460px;}
+        #syl-random{padding:14px 26px; font-size:1.15rem; font-weight:bold; color:#fff;
+            background:var(--purple); border:none; border-radius:18px; box-shadow:0 5px 0 #6b5ad1;}
+        #syl-random:active{transform:translateY(4px); box-shadow:0 1px 0 #6b5ad1;}
+        .machine{position:relative; width:92%; max-width:400px; height:210px; background:#37474F;
+            border-radius:32px; border:10px solid #263238; display:flex; align-items:center;
+            justify-content:center; box-shadow:inset 0 0 24px #000, 0 10px 24px rgba(0,0,0,.25);}
+        .machine::before,.machine::after{content:""; position:absolute; top:-24px; width:16px; height:16px;
+            border-radius:50%; background:#263238;}
+        .machine::before{left:60px; box-shadow:0 -10px 0 -2px #263238;}
+        .machine::after{right:60px; box-shadow:0 -10px 0 -2px #263238;}
+        .consonant{font-size:6.5rem; font-weight:900; color:var(--teal); margin-right:12px;
+            text-shadow:0 0 22px rgba(0,194,184,.8);}
+        .drop{width:120px; height:150px; border:5px dashed rgba(255,255,255,.25); border-radius:22px;
+            display:flex; align-items:center; justify-content:center; font-size:6.5rem; font-weight:900; color:var(--coral);}
+        .drop.hot{border-color:var(--sun); background:rgba(255,210,63,.15);}
+        .vowels{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; width:100%;}
+        .vowel{width:72px; height:72px; background:var(--coral); border-radius:18px; display:flex;
+            align-items:center; justify-content:center; font-size:2.6rem; font-weight:bold; color:#fff;
+            box-shadow:0 5px 0 #d94f4f; cursor:grab;}
+        #syl-result{position:fixed; top:26%; left:50%; transform:translate(-50%,-50%) scale(0);
+            transition:.45s cubic-bezier(.2,1.4,.4,1); z-index:60; pointer-events:none; background:#fff;
+            padding:16px 22px; border-radius:26px; box-shadow:0 12px 30px rgba(0,0,0,.25);}
+        #syl-result.show{transform:translate(-50%,-50%) scale(1);}
+        #syl-result .ri{width:110px; height:110px; margin:0 auto;}
+        #syl-result .ri svg{width:100%; height:100%;}
+        #syl-result .ri .emoji{font-size:5rem; line-height:110px;}
+        #syl-result .rt{font-size:2.4rem; font-weight:bold; color:var(--purple);}
+
+        /* ---------- Jogos de escolha (Letras / Inglês) ---------- */
+        .quiz{display:flex; flex-direction:column; align-items:center; gap:14px; width:100%; max-width:640px;}
+        .quiz .prompt{font-size:1.15rem; color:#5a6b7a; min-height:1.4em;}
+        .bigart{width:200px; height:200px; background:#fff; border-radius:30px; padding:12px;
+            box-shadow:0 10px 0 rgba(0,0,0,.08), 0 16px 30px rgba(0,0,0,.12);}
+        .bigart svg{width:100%; height:100%;}
+        .options{display:flex; gap:16px; flex-wrap:wrap; justify-content:center;}
+        .opt-letter{width:96px; height:96px; border-radius:22px; background:var(--coral); color:#fff;
+            font-size:3.4rem; font-weight:900; display:flex; align-items:center; justify-content:center;
+            box-shadow:0 6px 0 #d94f4f; cursor:pointer;}
+        .opt-letter:nth-child(2){background:var(--teal); box-shadow:0 6px 0 #008f88;}
+        .opt-letter:nth-child(3){background:var(--purple); box-shadow:0 6px 0 #6b5ad1;}
+        .opt-img{width:130px; height:130px; background:#fff; border-radius:24px; padding:8px; cursor:pointer;
+            box-shadow:0 6px 0 rgba(0,0,0,.10); border:4px solid #fff;}
+        .opt-img svg{width:100%; height:100%;}
+        .opt-letter:active,.opt-img:active{transform:translateY(4px);}
+        .shake{animation:shake .4s;}
+        @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+        .pick-right{animation:pop .5s;}
+        @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.18);}100%{transform:scale(1);}}
+
+        /* ---------- Celebração ---------- */
+        #cheer{position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center;
+            pointer-events:none;}
+        #cheer.show{display:flex;}
+        #cheer .stars{font-size:5rem; animation:pop .6s;}
+        .confetti{position:fixed; top:-20px; width:12px; height:12px; z-index:79; border-radius:3px; pointer-events:none;}
+        @keyframes fall{to{transform:translateY(110vh) rotate(540deg); opacity:0;}}
     </style>
 </head>
 <body>
 
-<div id="start-overlay">
-    <button id="start-btn">JOGAR! 🚀</button>
-</div>
+<!-- ============ ARRANQUE ============ -->
+<section id="start" class="screen active">
+    <div class="cloud">☁️ 🌈 ☁️</div>
+    <h1>Aprender a Brincar</h1>
+    <button id="start-btn">Toca para começar 👆</button>
+</section>
 
-<div class="game-world">
-    <div id="result-display">
-        <span class="result-image" id="res-img"></span>
-        <span class="result-text" id="res-txt"></span>
+<!-- ============ MENU ============ -->
+<section id="menu" class="screen">
+    <h1>Escolhe um jogo 🎈</h1>
+    <p>Toca numa imagem</p>
+    <div class="cards">
+        <div class="card c1" data-go="g-syl" data-say="Máquina de sílabas">
+            <div class="art" data-art="icoSyl"></div>
+            <div class="name">Sílabas</div>
+            <div class="sub">Junta letras e ouve</div>
+        </div>
+        <div class="card c2" data-go="g-let" data-say="Primeiras letras">
+            <div class="art" data-art="icoLet"></div>
+            <div class="name">Primeiras Letras</div>
+            <div class="sub">Que letra começa?</div>
+        </div>
+        <div class="card c3" data-go="g-eng" data-say="Inglês">
+            <div class="art" data-art="icoEng"></div>
+            <div class="name">Inglês</div>
+            <div class="sub">Aprende palavras novas</div>
+        </div>
     </div>
+</section>
 
-    <button id="random-btn">TROCAR LETRA 🎲</button>
-
-    <div class="machine-container">
-        <div class="consonant-fixed" id="main-consonant">V</div>
-        <div class="vowel-drop-zone" id="target">?</div>
+<!-- ============ JOGO 1: SÍLABAS ============ -->
+<section id="g-syl" class="screen">
+    <button class="home-btn" data-home>🏠</button>
+    <div class="game-title">Sílabas</div>
+    <div id="syl-result"><div class="ri" id="syl-ri"></div><div class="rt" id="syl-rt"></div></div>
+    <div class="stage">
+        <button id="syl-random">Trocar letra 🎲</button>
+        <div class="machine">
+            <div class="consonant" id="syl-con">V</div>
+            <div class="drop" id="syl-drop">?</div>
+        </div>
+        <div class="vowels">
+            <div class="vowel" data-v="A">A</div>
+            <div class="vowel" data-v="E">E</div>
+            <div class="vowel" data-v="I">I</div>
+            <div class="vowel" data-v="O">O</div>
+            <div class="vowel" data-v="U">U</div>
+        </div>
     </div>
+</section>
 
-    <div class="vowel-carousel">
-        <div class="vowel-card" data-vowel="A">A</div>
-        <div class="vowel-card" data-vowel="E">E</div>
-        <div class="vowel-card" data-vowel="I">I</div>
-        <div class="vowel-card" data-vowel="O">O</div>
-        <div class="vowel-card" data-vowel="U">U</div>
+<!-- ============ JOGO 2: PRIMEIRAS LETRAS ============ -->
+<section id="g-let" class="screen">
+    <button class="home-btn" data-home>🏠</button>
+    <button class="ear-btn" id="let-ear">🔊</button>
+    <div class="game-title">Primeiras Letras</div>
+    <div class="quiz">
+        <div class="prompt" id="let-prompt">Com que letra começa?</div>
+        <div class="bigart" id="let-art"></div>
+        <div class="options" id="let-opts"></div>
     </div>
-</div>
+</section>
+
+<!-- ============ JOGO 3: INGLÊS ============ -->
+<section id="g-eng" class="screen">
+    <button class="home-btn" data-home>🏠</button>
+    <button class="ear-btn" id="eng-ear">🔊</button>
+    <div class="game-title">Inglês</div>
+    <div class="quiz">
+        <div class="prompt" id="eng-prompt">Ouve e escolhe a imagem certa</div>
+        <div class="options" id="eng-opts"></div>
+    </div>
+</section>
+
+<!-- ============ CELEBRAÇÃO ============ -->
+<div id="cheer"><div class="stars">⭐⭐⭐</div></div>
 
 <script>
-    const consonants = ['B', 'D', 'F', 'G', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V'];
-    
-    // Mapeamento fonético rigoroso para PT-PT
-    const dictionary = {
-        'B': { A:'BÁ', E:'BÉ', I:'BI', O:'BÓ', U:'BU', img:'🔔' },
-        'P': { A:'PÁ', E:'PÉ', I:'PI', O:'PÓ', U:'PU', img:'🦶' },
-        'M': { A:'MÁ', E:'MÉ', I:'MI', O:'MÓ', U:'MU', img:'🐮' },
-        'L': { A:'LÁ', E:'LÉ', I:'LI', O:'LÓ', U:'LU', img:'🌙' },
-        'T': { A:'TÁ', E:'TÉ', I:'TI', O:'TÓ', U:'TU', img:'🚂' },
-        'V': { A:'VÁ', E:'VÉ', I:'VI', O:'VÓ', U:'VU', img:'🌪️' },
-        'D': { A:'DÁ', E:'DÉ', I:'DI', O:'DÓ', U:'DU', img:'🎲' },
-        'F': { A:'FÁ', E:'FÉ', I:'FI', O:'FÓ', U:'FU', img:'🔥' },
-        'S': { A:'SÁ', E:'SÉ', I:'SI', O:'SÓ', U:'SU', img:'🐍' },
-        'N': { A:'NÁ', E:'NÉ', I:'NI', O:'NÓ', U:'NU', img:'🔢' },
-        'R': { A:'RÁ', E:'RÉ', I:'RI', O:'RÓ', U:'RU', img:'🚗' }
-    };
+/* =========================================================
+   ILUSTRAÇÕES SVG (desenhadas à mão em código)
+   ========================================================= */
+const ART = {
+  sol:`<svg viewBox="0 0 200 200"><g stroke="#F4A100" stroke-width="8" stroke-linecap="round">
+    <line x1="100" y1="18" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="182"/>
+    <line x1="18" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="182" y2="100"/>
+    <line x1="41" y1="41" x2="57" y2="57"/><line x1="143" y1="143" x2="159" y2="159"/>
+    <line x1="41" y1="159" x2="57" y2="143"/><line x1="143" y1="57" x2="159" y2="41"/></g>
+    <circle cx="100" cy="100" r="52" fill="#FFD23F" stroke="#F4A100" stroke-width="5"/>
+    <circle cx="83" cy="92" r="6" fill="#5a3e00"/><circle cx="117" cy="92" r="6" fill="#5a3e00"/>
+    <path d="M80 115 Q100 132 120 115" fill="none" stroke="#5a3e00" stroke-width="5" stroke-linecap="round"/></svg>`,
 
-    let activeConsonant = 'V';
-    let synth = window.speechSynthesis;
+  lua:`<svg viewBox="0 0 200 200">
+    <path d="M120 30 A72 72 0 1 0 120 170 A54 54 0 1 1 120 30 Z" fill="#F9DC6B" stroke="#E0B84A" stroke-width="5"/>
+    <circle cx="92" cy="88" r="6" fill="#7a5a00"/>
+    <path d="M78 108 Q92 122 106 108" fill="none" stroke="#7a5a00" stroke-width="5" stroke-linecap="round"/></svg>`,
 
-    // Função para converter letras em sons abertos de Portugal
-    function getPhoneticSound(text) {
-        return text.replace(/A/g, 'Á').replace(/E/g, 'É').replace(/O/g, 'Ó');
-    }
+  gato:`<svg viewBox="0 0 200 200">
+    <polygon points="58,72 70,28 96,60" fill="#9AA7B0"/><polygon points="142,72 130,28 104,60" fill="#9AA7B0"/>
+    <polygon points="66,64 72,42 84,58" fill="#F7B2C4"/><polygon points="134,64 128,42 116,58" fill="#F7B2C4"/>
+    <circle cx="100" cy="108" r="52" fill="#9AA7B0" stroke="#7d8b95" stroke-width="4"/>
+    <ellipse cx="82" cy="100" rx="8" ry="11" fill="#3a7d44"/><ellipse cx="118" cy="100" rx="8" ry="11" fill="#3a7d44"/>
+    <circle cx="82" cy="102" r="4" fill="#111"/><circle cx="118" cy="102" r="4" fill="#111"/>
+    <polygon points="94,120 106,120 100,128" fill="#F7607A"/>
+    <path d="M100 128 Q100 136 108 138 M100 128 Q100 136 92 138" fill="none" stroke="#5b6770" stroke-width="3" stroke-linecap="round"/>
+    <g stroke="#7d8b95" stroke-width="3" stroke-linecap="round"><line x1="60" y1="118" x2="30" y2="112"/>
+    <line x1="60" y1="126" x2="30" y2="128"/><line x1="140" y1="118" x2="170" y2="112"/><line x1="140" y1="126" x2="170" y2="128"/></g></svg>`,
 
-    function speak(text) {
-        synth.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        const voices = synth.getVoices();
-        // Procura vozes PT-PT explicitamente
-        const ptPtVoice = voices.find(v => v.lang === 'pt-PT' || v.lang === 'pt_PT' || (v.lang.startsWith('pt') && v.name.includes('Portugal')));
-        
-        if (ptPtVoice) utterance.voice = ptPtVoice;
-        utterance.lang = 'pt-PT';
-        utterance.rate = 0.6; // Reduzido para maior clareza silábica
-        utterance.pitch = 1.0;
-        synth.speak(utterance);
-    }
+  cao:`<svg viewBox="0 0 200 200">
+    <ellipse cx="52" cy="110" rx="22" ry="40" fill="#8B5A2B"/><ellipse cx="148" cy="110" rx="22" ry="40" fill="#8B5A2B"/>
+    <circle cx="100" cy="105" r="52" fill="#C58A54" stroke="#8B5A2B" stroke-width="4"/>
+    <ellipse cx="100" cy="120" rx="30" ry="24" fill="#F0D8B8"/>
+    <circle cx="82" cy="95" r="6" fill="#3a2a17"/><circle cx="118" cy="95" r="6" fill="#3a2a17"/>
+    <ellipse cx="100" cy="112" rx="12" ry="9" fill="#3a2a17"/><path d="M100 121 L100 134" stroke="#3a2a17" stroke-width="4"/>
+    <path d="M100 134 Q88 140 84 132 M100 134 Q112 140 116 132" fill="none" stroke="#3a2a17" stroke-width="4" stroke-linecap="round"/></svg>`,
 
-    function randomizeConsonant() {
-        const idx = Math.floor(Math.random() * consonants.length);
-        activeConsonant = consonants[idx];
-        document.getElementById('main-consonant').innerText = activeConsonant;
-        speak(`Letra ${activeConsonant}`);
-    }
+  pato:`<svg viewBox="0 0 200 200">
+    <ellipse cx="96" cy="130" rx="60" ry="42" fill="#FFD23F" stroke="#E6A700" stroke-width="4"/>
+    <path d="M150 120 q30 -6 34 8 q-14 14 -34 4 Z" fill="#FFE9A0"/>
+    <circle cx="60" cy="78" r="34" fill="#FFD23F" stroke="#E6A700" stroke-width="4"/>
+    <circle cx="52" cy="70" r="6" fill="#222"/>
+    <path d="M26 78 q-24 2 -24 10 q0 8 24 8 q6 -9 0 -18 Z" fill="#F5872E" stroke="#d96f18" stroke-width="3"/></svg>`,
 
-    document.getElementById('start-btn').addEventListener('click', () => {
-        document.getElementById('start-overlay').style.display = 'none';
-        randomizeConsonant();
-    });
+  bola:`<svg viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="60" fill="#fff"/>
+    <path d="M100 40 A60 60 0 0 1 152 130 L100 100 Z" fill="#FF5D5D"/>
+    <path d="M152 130 A60 60 0 0 1 48 130 L100 100 Z" fill="#FFD23F"/>
+    <path d="M48 130 A60 60 0 0 1 100 40 L100 100 Z" fill="#4FC3F7"/>
+    <circle cx="100" cy="100" r="9" fill="#fff" stroke="#bbb" stroke-width="2"/>
+    <circle cx="100" cy="100" r="60" fill="none" stroke="#cfcfcf" stroke-width="3"/></svg>`,
 
-    document.getElementById('random-btn').addEventListener('click', randomizeConsonant);
+  flor:`<svg viewBox="0 0 200 200">
+    <line x1="100" y1="100" x2="100" y2="182" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"/>
+    <path d="M100 150 q28 -6 40 -28" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"/>
+    <g fill="#FF6FA5" stroke="#e0508a" stroke-width="3">
+    <ellipse cx="100" cy="58" rx="18" ry="26"/><ellipse cx="142" cy="90" rx="26" ry="18"/>
+    <ellipse cx="58" cy="90" rx="26" ry="18"/><ellipse cx="122" cy="126" rx="18" ry="24"/><ellipse cx="78" cy="126" rx="18" ry="24"/></g>
+    <circle cx="100" cy="92" r="22" fill="#FFD23F" stroke="#E6A700" stroke-width="3"/></svg>`,
 
-    let draggedEl = null;
+  casa:`<svg viewBox="0 0 200 200">
+    <rect x="46" y="92" width="108" height="80" rx="6" fill="#FFCF7A" stroke="#d99a3a" stroke-width="4"/>
+    <polygon points="100,34 168,96 32,96" fill="#E4572E" stroke="#b23c1c" stroke-width="4"/>
+    <rect x="86" y="120" width="30" height="52" rx="4" fill="#8B5A2B"/><circle cx="110" cy="146" r="3" fill="#FFD23F"/>
+    <rect x="58" y="112" width="24" height="24" rx="3" fill="#8ED6F0" stroke="#3aa9d4" stroke-width="3"/>
+    <rect x="120" y="112" width="24" height="24" rx="3" fill="#8ED6F0" stroke="#3aa9d4" stroke-width="3"/></svg>`,
 
-    document.querySelectorAll('.vowel-card').forEach(card => {
-        card.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            draggedEl = card.cloneNode(true);
-            draggedEl.style.position = 'fixed';
-            draggedEl.style.zIndex = '1000';
-            draggedEl.style.left = touch.clientX - 35 + 'px';
-            draggedEl.style.top = touch.clientY - 35 + 'px';
-            document.body.appendChild(draggedEl);
-            
-            // Requisito: "Letra Á", "Letra É", "Letra Ó" (sons abertos)
-            speak("Letra " + getPhoneticSound(card.dataset.vowel));
-        });
-    });
+  maca:`<svg viewBox="0 0 200 200">
+    <path d="M100 60 C70 40 40 60 44 96 C48 140 78 170 100 170 C122 170 152 140 156 96 C160 60 130 40 100 60 Z" fill="#E63946" stroke="#b52836" stroke-width="4"/>
+    <path d="M100 62 C100 44 112 34 128 34" fill="none" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/>
+    <path d="M128 40 q26 -10 34 8 q-24 12 -34 -2 Z" fill="#4CAF50" stroke="#3a8a3d" stroke-width="3"/>
+    <ellipse cx="78" cy="92" rx="12" ry="16" fill="#fff" opacity="0.35"/></svg>`,
 
-    window.addEventListener('touchmove', (e) => {
-        if (!draggedEl) return;
-        const touch = e.touches[0];
-        draggedEl.style.left = touch.clientX - 35 + 'px';
-        draggedEl.style.top = touch.clientY - 35 + 'px';
-    });
+  peixe:`<svg viewBox="0 0 200 200">
+    <polygon points="150,100 190,72 190,128" fill="#F5872E"/>
+    <ellipse cx="90" cy="100" rx="70" ry="46" fill="#4FC3F7" stroke="#2f9fd4" stroke-width="4"/>
+    <path d="M90 60 q18 -18 34 -6 q-6 14 -22 16 Z" fill="#8ED6F0"/>
+    <circle cx="52" cy="92" r="9" fill="#fff"/><circle cx="50" cy="92" r="4" fill="#111"/>
+    <path d="M64 116 q10 8 22 0 M92 116 q10 8 22 0" fill="none" stroke="#2f9fd4" stroke-width="3" stroke-linecap="round"/></svg>`,
 
-    window.addEventListener('touchend', (e) => {
-        if (!draggedEl) return;
-        const touch = e.changedTouches[0];
-        const target = document.getElementById('target').getBoundingClientRect();
+  estrela:`<svg viewBox="0 0 200 200">
+    <polygon points="100,22 122,78 182,80 134,118 150,178 100,142 50,178 66,118 18,80 78,78" fill="#FFD23F" stroke="#E6A700" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="86" cy="96" r="5" fill="#7a5a00"/><circle cx="114" cy="96" r="5" fill="#7a5a00"/>
+    <path d="M84 112 Q100 126 116 112" fill="none" stroke="#7a5a00" stroke-width="4" stroke-linecap="round"/></svg>`,
 
-        if (touch.clientX > target.left && touch.clientX < target.right &&
-            touch.clientY > target.top && touch.clientY < target.bottom) {
-            
-            const v = draggedEl.dataset.vowel;
-            
-            // Busca no dicionário ou fabrica o som com fonética aberta
-            let soundToPlay = "";
-            if (dictionary[activeConsonant] && dictionary[activeConsonant][v]) {
-                soundToPlay = dictionary[activeConsonant][v];
-            } else {
-                soundToPlay = activeConsonant + getPhoneticSound(v);
-            }
-            
-            const targetZone = document.getElementById('target');
-            const resDiv = document.getElementById('result-display');
-            
-            targetZone.innerText = v;
-            document.getElementById('res-img').innerText = (dictionary[activeConsonant] && dictionary[activeConsonant].img) || '✨';
-            document.getElementById('res-txt').innerText = activeConsonant + v;
-            
-            resDiv.classList.add('show');
-            speak(soundToPlay);
+  arvore:`<svg viewBox="0 0 200 200">
+    <rect x="88" y="120" width="24" height="60" rx="6" fill="#8B5A2B"/>
+    <circle cx="100" cy="80" r="42" fill="#4CAF50" stroke="#3a8a3d" stroke-width="4"/>
+    <circle cx="66" cy="100" r="30" fill="#57BB5B" stroke="#3a8a3d" stroke-width="4"/>
+    <circle cx="134" cy="100" r="30" fill="#57BB5B" stroke="#3a8a3d" stroke-width="4"/>
+    <circle cx="100" cy="106" r="34" fill="#66C86A"/>
+    <circle cx="86" cy="74" r="6" fill="#e63946"/><circle cx="118" cy="92" r="6" fill="#e63946"/></svg>`,
 
-            setTimeout(() => {
-                resDiv.classList.remove('show');
-                targetZone.innerText = '?';
-            }, 2200);
-        }
-        draggedEl.remove();
-        draggedEl = null;
-    });
+  vaca:`<svg viewBox="0 0 200 200">
+    <polygon points="54,64 40,40 70,52" fill="#C9A24B"/><polygon points="146,64 160,40 130,52" fill="#C9A24B"/>
+    <ellipse cx="48" cy="96" rx="18" ry="12" fill="#F7B2C4"/><ellipse cx="152" cy="96" rx="18" ry="12" fill="#F7B2C4"/>
+    <circle cx="100" cy="100" r="54" fill="#fff" stroke="#cfcfcf" stroke-width="4"/>
+    <path d="M70 66 q18 -6 22 10 q-10 16 -26 6 Z" fill="#444"/>
+    <path d="M138 118 q-16 -4 -12 14 q14 10 22 -6 Z" fill="#444"/>
+    <ellipse cx="100" cy="132" rx="34" ry="24" fill="#F7B2C4" stroke="#e08aa0" stroke-width="3"/>
+    <circle cx="88" cy="132" r="5" fill="#a85c72"/><circle cx="112" cy="132" r="5" fill="#a85c72"/>
+    <circle cx="80" cy="92" r="6" fill="#111"/><circle cx="120" cy="92" r="6" fill="#111"/></svg>`,
 
-    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+  rato:`<svg viewBox="0 0 200 200">
+    <circle cx="58" cy="66" r="30" fill="#B7BFC6"/><circle cx="142" cy="66" r="30" fill="#B7BFC6"/>
+    <circle cx="58" cy="66" r="16" fill="#F7B2C4"/><circle cx="142" cy="66" r="16" fill="#F7B2C4"/>
+    <circle cx="100" cy="110" r="50" fill="#C6CDD3" stroke="#9aa2a9" stroke-width="4"/>
+    <circle cx="84" cy="104" r="6" fill="#111"/><circle cx="116" cy="104" r="6" fill="#111"/>
+    <ellipse cx="100" cy="124" rx="9" ry="7" fill="#F7607A"/>
+    <path d="M148 140 q40 6 30 40" fill="none" stroke="#F7B2C4" stroke-width="7" stroke-linecap="round"/></svg>`,
+
+  /* ---- Ícones do menu ---- */
+  icoSyl:`<svg viewBox="0 0 200 200">
+    <circle cx="60" cy="40" r="7" fill="#008f88"/><line x1="60" y1="47" x2="60" y2="54" stroke="#008f88" stroke-width="5"/>
+    <circle cx="140" cy="40" r="7" fill="#008f88"/><line x1="140" y1="47" x2="140" y2="54" stroke="#008f88" stroke-width="5"/>
+    <rect x="34" y="54" width="132" height="104" rx="18" fill="#00C2B8" stroke="#008f88" stroke-width="5"/>
+    <rect x="52" y="76" width="96" height="60" rx="10" fill="#04322f"/>
+    <text x="100" y="120" font-family="Comic Sans MS, sans-serif" font-size="40" font-weight="bold" fill="#7CFCE0" text-anchor="middle">BA</text></svg>`,
+
+  icoLet:`<svg viewBox="0 0 200 200">
+    <text x="84" y="150" font-family="Comic Sans MS, sans-serif" font-size="130" font-weight="bold" fill="#FF6B6B" text-anchor="middle">A</text>
+    <g transform="rotate(38 150 110)">
+    <rect x="138" y="34" width="24" height="92" rx="4" fill="#FFD23F" stroke="#E6A700" stroke-width="3"/>
+    <rect x="138" y="34" width="24" height="16" fill="#F7607A"/>
+    <polygon points="138,126 162,126 150,156" fill="#F0D8B8" stroke="#c9a24b" stroke-width="2"/>
+    <polygon points="144,144 156,144 150,156" fill="#333"/></g></svg>`,
+
+  icoEng:`<svg viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="66" fill="#4FC3F7" stroke="#2f9fd4" stroke-width="5"/>
+    <path d="M40 88 q30 -14 60 0 t60 0" fill="none" stroke="#fff" stroke-width="4"/>
+    <path d="M40 118 q30 14 60 0 t60 0" fill="none" stroke="#fff" stroke-width="4"/>
+    <ellipse cx="100" cy="100" rx="30" ry="66" fill="none" stroke="#fff" stroke-width="4"/>
+    <line x1="34" y1="100" x2="166" y2="100" stroke="#fff" stroke-width="4"/>
+    <path d="M66 70 q10 20 -2 34 q22 6 20 26" fill="#7CCB6B" opacity="0.85"/>
+    <path d="M120 60 q18 8 14 26 q-16 4 -10 20" fill="#7CCB6B" opacity="0.85"/></svg>`
+};
+
+/* =========================================================
+   VOZ (PT-PT / Inglês)
+   ========================================================= */
+const synth = window.speechSynthesis;
+let voices = [];
+function loadVoices(){ voices = synth.getVoices(); }
+loadVoices();
+if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+
+function pickVoice(lang){
+  if(lang.startsWith('pt'))
+    return voices.find(v=>v.lang==='pt-PT'||v.lang==='pt_PT'||(v.lang.toLowerCase().startsWith('pt')&&/portugal/i.test(v.name)))
+        || voices.find(v=>v.lang.toLowerCase().startsWith('pt'));
+  return voices.find(v=>v.lang==='en-GB') || voices.find(v=>v.lang.toLowerCase().startsWith('en'));
+}
+function speak(text, lang='pt-PT', rate=0.72){
+  if(!text) return;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const v = pickVoice(lang); if(v) u.voice=v;
+  u.lang=lang; u.rate=rate; u.pitch=1.05;
+  synth.speak(u);
+}
+/* fala vários pedaços em sequência (ex.: PT depois Inglês) */
+function speakSeq(items){
+  synth.cancel();
+  let i=0;
+  (function next(){
+    if(i>=items.length) return;
+    const it=items[i++];
+    const u=new SpeechSynthesisUtterance(it.t);
+    const v=pickVoice(it.l||'pt-PT'); if(v) u.voice=v;
+    u.lang=it.l||'pt-PT'; u.rate=it.r||0.72; u.pitch=1.05;
+    u.onend=()=>setTimeout(next,220);
+    synth.speak(u);
+  })();
+}
+
+/* =========================================================
+   NAVEGAÇÃO ENTRE ECRÃS
+   ========================================================= */
+function showScreen(id){
+  synth.cancel();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='g-let') newLetterRound();
+  if(id==='g-eng') newEnglishRound();
+}
+
+/* renderiza ilustrações marcadas com data-art */
+document.querySelectorAll('[data-art]').forEach(el=>{ el.innerHTML = ART[el.dataset.art]||''; });
+
+/* Arranque -> desbloqueia áudio e mostra o menu */
+document.getElementById('start-btn').addEventListener('click', ()=>{
+  speak('Olá! Vamos brincar.');
+  showScreen('menu');
+});
+
+/* Cartões do menu */
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    speak(card.dataset.say);
+    setTimeout(()=>showScreen(card.dataset.go), 550);
+  });
+});
+
+/* Botões casa */
+document.querySelectorAll('[data-home]').forEach(b=>{
+  b.addEventListener('click', ()=>{ speak('Menu'); showScreen('menu'); });
+});
+
+/* =========================================================
+   CELEBRAÇÃO (estrelas + confetti)
+   ========================================================= */
+function celebrate(){
+  const c=document.getElementById('cheer');
+  c.classList.add('show');
+  const cols=['#FF6B6B','#FFD23F','#00C2B8','#8E7CFF','#4CC36B'];
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='confetti';
+    p.style.left=Math.random()*100+'vw';
+    p.style.background=cols[i%cols.length];
+    p.style.animation=`fall ${1+Math.random()}s ease-in forwards`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),2000);
+  }
+  setTimeout(()=>c.classList.remove('show'),1200);
+}
+
+/* =========================================================
+   JOGO 1 — MÁQUINA DE SÍLABAS (arrastar vogais)
+   ========================================================= */
+const CONS = ['B','D','F','G','L','M','N','P','R','S','T','V'];
+const SYL = {
+  B:{art:'bola'}, P:{art:'pato'}, M:{art:'maca'}, L:{art:'lua'}, F:{art:'flor'},
+  S:{art:'sol'}, R:{art:'rato'}, V:{art:'vaca'}, G:{art:'gato'},
+  D:{emoji:'🎲'}, N:{emoji:'🔢'}, T:{emoji:'🚂'}
+};
+let activeCon = 'V';
+
+function phonetic(t){ return t.replace(/A/g,'Á').replace(/E/g,'É').replace(/O/g,'Ó'); }
+function randomCon(){
+  activeCon = CONS[Math.floor(Math.random()*CONS.length)];
+  document.getElementById('syl-con').innerText = activeCon;
+  speak('Letra '+activeCon);
+}
+document.getElementById('syl-random').addEventListener('click', randomCon);
+
+let dragEl=null;
+document.querySelectorAll('.vowel').forEach(card=>{
+  card.addEventListener('touchstart', e=>{
+    startDrag(card, e.touches[0]);
+    speak('Letra '+phonetic(card.dataset.v));
+  }, {passive:true});
+  card.addEventListener('mousedown', e=>{ startDrag(card,e); speak('Letra '+phonetic(card.dataset.v)); });
+});
+function startDrag(card, pt){
+  dragEl = card.cloneNode(true);
+  Object.assign(dragEl.style,{position:'fixed', zIndex:1000, left:(pt.clientX-36)+'px', top:(pt.clientY-36)+'px', opacity:.95});
+  dragEl.dataset.v = card.dataset.v;
+  document.body.appendChild(dragEl);
+}
+function moveDrag(pt){
+  if(!dragEl) return;
+  dragEl.style.left=(pt.clientX-36)+'px'; dragEl.style.top=(pt.clientY-36)+'px';
+  const d=document.getElementById('syl-drop').getBoundingClientRect();
+  const over = pt.clientX>d.left&&pt.clientX<d.right&&pt.clientY>d.top&&pt.clientY<d.bottom;
+  document.getElementById('syl-drop').classList.toggle('hot', over);
+}
+window.addEventListener('touchmove', e=>{ if(dragEl){ moveDrag(e.touches[0]); } }, {passive:true});
+window.addEventListener('mousemove', e=>{ if(dragEl) moveDrag(e); });
+function endDrag(pt){
+  if(!dragEl) return;
+  const drop=document.getElementById('syl-drop');
+  const d=drop.getBoundingClientRect();
+  drop.classList.remove('hot');
+  if(pt.clientX>d.left&&pt.clientX<d.right&&pt.clientY>d.top&&pt.clientY<d.bottom){
+    dropVowel(dragEl.dataset.v);
+  }
+  dragEl.remove(); dragEl=null;
+}
+window.addEventListener('touchend', e=>{ if(dragEl) endDrag(e.changedTouches[0]); });
+window.addEventListener('mouseup', e=>{ if(dragEl) endDrag(e); });
+
+function dropVowel(v){
+  const drop=document.getElementById('syl-drop');
+  const res=document.getElementById('syl-result');
+  const info=SYL[activeCon]||{};
+  drop.innerText=v;
+  document.getElementById('syl-ri').innerHTML = info.art ? ART[info.art] : `<span class="emoji">${info.emoji||'✨'}</span>`;
+  document.getElementById('syl-rt').innerText = activeCon+v;
+  res.classList.add('show');
+  speak(activeCon+phonetic(v));
+  setTimeout(()=>{ res.classList.remove('show'); drop.innerText='?'; }, 2200);
+}
+
+/* =========================================================
+   JOGO 2 — PRIMEIRAS LETRAS (que letra começa?)
+   ========================================================= */
+const LET_WORDS = [
+  {k:'sol',w:'Sol',L:'S'}, {k:'lua',w:'Lua',L:'L'}, {k:'gato',w:'Gato',L:'G'},
+  {k:'pato',w:'Pato',L:'P'}, {k:'bola',w:'Bola',L:'B'}, {k:'flor',w:'Flor',L:'F'},
+  {k:'casa',w:'Casa',L:'C'}, {k:'maca',w:'Maçã',L:'M'}, {k:'peixe',w:'Peixe',L:'P'},
+  {k:'estrela',w:'Estrela',L:'E'}, {k:'arvore',w:'Árvore',L:'A'}, {k:'vaca',w:'Vaca',L:'V'},
+  {k:'rato',w:'Rato',L:'R'}
+];
+const LET_POOL = ['A','B','C','D','E','F','G','L','M','N','O','P','R','S','T','U','V'];
+let letCurrent=null, letLast=-1;
+
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function newLetterRound(){
+  let idx; do{ idx=(Math.random()*LET_WORDS.length)|0; }while(idx===letLast&&LET_WORDS.length>1);
+  letLast=idx; letCurrent=LET_WORDS[idx];
+  document.getElementById('let-art').innerHTML = ART[letCurrent.k];
+  const distract = shuffle(LET_POOL.filter(l=>l!==letCurrent.L)).slice(0,2);
+  const opts = shuffle([letCurrent.L, ...distract]);
+  const box = document.getElementById('let-opts'); box.innerHTML='';
+  opts.forEach(l=>{
+    const el=document.createElement('div'); el.className='opt-letter'; el.innerText=l; el.dataset.l=l;
+    el.addEventListener('click', ()=>chooseLetter(el, l));
+    box.appendChild(el);
+  });
+  setTimeout(()=>speakLetterPrompt(), 400);
+}
+function speakLetterPrompt(){
+  speakSeq([{t:letCurrent.w, r:0.8}, {t:'Com que letra começa?', r:0.85}]);
+}
+document.getElementById('let-ear').addEventListener('click', speakLetterPrompt);
+
+function chooseLetter(el, l){
+  if(l===letCurrent.L){
+    el.classList.add('pick-right');
+    speakSeq([{t:'Boa!'}, {t:`${letCurrent.w} começa com a letra ${letCurrent.L}.`, r:0.75}]);
+    celebrate();
+    setTimeout(newLetterRound, 2600);
+  } else {
+    el.classList.add('shake');
+    setTimeout(()=>el.classList.remove('shake'),450);
+    speak('Quase! Tenta outra vez.', 'pt-PT', 0.8);
+  }
+}
+
+/* =========================================================
+   JOGO 3 — INGLÊS (ouve em inglês, escolhe a imagem)
+   ========================================================= */
+const ENG_WORDS = [
+  {k:'gato',pt:'gato',en:'cat'}, {k:'cao',pt:'cão',en:'dog'}, {k:'sol',pt:'sol',en:'sun'},
+  {k:'lua',pt:'lua',en:'moon'}, {k:'bola',pt:'bola',en:'ball'}, {k:'flor',pt:'flor',en:'flower'},
+  {k:'casa',pt:'casa',en:'house'}, {k:'maca',pt:'maçã',en:'apple'}, {k:'peixe',pt:'peixe',en:'fish'},
+  {k:'estrela',pt:'estrela',en:'star'}, {k:'arvore',pt:'árvore',en:'tree'}, {k:'vaca',pt:'vaca',en:'cow'},
+  {k:'pato',pt:'pato',en:'duck'}, {k:'rato',pt:'rato',en:'mouse'}
+];
+let engCurrent=null, engLast=-1;
+
+function newEnglishRound(){
+  let idx; do{ idx=(Math.random()*ENG_WORDS.length)|0; }while(idx===engLast&&ENG_WORDS.length>1);
+  engLast=idx; engCurrent=ENG_WORDS[idx];
+  const others = shuffle(ENG_WORDS.filter(w=>w.k!==engCurrent.k)).slice(0,2);
+  const opts = shuffle([engCurrent, ...others]);
+  const box = document.getElementById('eng-opts'); box.innerHTML='';
+  opts.forEach(w=>{
+    const el=document.createElement('div'); el.className='opt-img'; el.innerHTML=ART[w.k]; el.dataset.k=w.k;
+    el.addEventListener('click', ()=>chooseEnglish(el, w));
+    box.appendChild(el);
+  });
+  setTimeout(()=>speakEnglishPrompt(), 400);
+}
+function speakEnglishPrompt(){
+  speakSeq([{t:'Onde está...', r:0.85}, {t:engCurrent.en, l:'en-GB', r:0.8}]);
+}
+document.getElementById('eng-ear').addEventListener('click', speakEnglishPrompt);
+
+function chooseEnglish(el, w){
+  if(w.k===engCurrent.k){
+    el.classList.add('pick-right');
+    speakSeq([{t:'Boa!'}, {t:engCurrent.en, l:'en-GB', r:0.75}, {t:'é '+engCurrent.pt, r:0.8}]);
+    celebrate();
+    setTimeout(newEnglishRound, 2800);
+  } else {
+    el.classList.add('shake');
+    setTimeout(()=>el.classList.remove('shake'),450);
+    speakSeq([{t:'Tenta outra vez.', r:0.8}, {t:engCurrent.en, l:'en-GB', r:0.8}]);
+  }
+}
 </script>
-
 </body>
 </html>
